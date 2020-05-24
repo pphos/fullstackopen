@@ -25,7 +25,7 @@ The translated scripts do not contain content that requires a Finnish Social Sec
 Full stack open 2020では, 新たにTypeScriptのパートが追加されました.
 この部分のコンテンツは<a href="https://www.terveystalo.com/fi/Yritystietoa/Terveystalo-tyontantajana/Digital-Health/">Terveystalo</a>により提供されています.
 
-このコースは3~9単位の価値があり, 内容は2020年春に<a href="https://www.helsinki.fi/en/computer-science">ヘルシンキ大学のコンピュータサイエンス学部</a>で開催される<a href="https://fullstackopen.com/">Full stack course</a>と同じです. また, 1~10単位の価値がある<a href="https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo">関連プロジェクト</a>もあります.
+このコースは3-9単位の価値があり, 内容は2020年春に<a href="https://www.helsinki.fi/en/computer-science">ヘルシンキ大学のコンピュータサイエンス学部</a>で開催される<a href="https://fullstackopen.com/">Full stack course</a>と同じです. また, 1-10単位の価値がある<a href="https://fullstackopen.com/osa0/yleista#full-stack-harjoitustyo">関連プロジェクト</a>もあります.
 
 このコースのパートナーと関連企業には, <a href="https://www.houston-inc.com/">Houston Inc</a>, <a href="https://www.terveystalo.com/fi/Yritystietoa/Terveystalo-tyontantajana/Digital-Health/">Terveystalo</a>, <a href="https://elisa.fi/">Elisa</a>, <a href="https://www.kesko.fi/">K-ryhmä</a>, <a href="https://www.instagram.com/unitytechnologies/?hl=en">Unity Technologies</a>, <a href="https://careers.konecranes.com/Konecranes/">Konecranes</a>含まれます.
 連携先の様々な専門家による講座に関連したトピックのゲストレクチャーは<a href="https://www.youtube.com/watch?v=BZexOyQZMMc&list=PLumQiZ25uijis31zaRL7rhzLalSwLqUtm">こちら</a>をご覧ください.
