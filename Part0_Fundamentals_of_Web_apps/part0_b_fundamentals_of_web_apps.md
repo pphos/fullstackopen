@@ -87,3 +87,246 @@ HTMLの`img`タグは, ブラウザにkuva.pngの画像を取得するように�
 その後, ブラウザはHTMLページと画像をスクリーンに表示します.
 
 気づくことは難しいですが, サーバから画像が取り込まれる前にHTMLページのレンダリングが始まります.
+
+## 従来のWebアプリケーション
+サンプルアプリケーションのホームページは, 従来のWebアプリケーションのように動作します.
+Webページに入ると, ブラウザはページの構造とテキストの内容を詳細に記述したHTMLドキュメントをサーバから取得します
+
+サーバは何らかの方法でこのドキュメントを作成しました.
+ドキュメントは, サーバのディレクトリに保存された静的テキストファイルにすることができます.
+サーバは, 例えばデータベースからデータを使って, アプリケーションのコードに応じて動的にHTMLドキュメントを作成することができます.
+サンプルアプリケーションのHTMLコードには, 作成されたノートの数に関する情報が含まれているため,
+動的に作成されています.
+
+ホームページのHTMLコードは以下の通りです.
+
+```js
+const getFrontPageHtml = (noteCount) => {
+  return(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+      </head>
+      <body>
+        <div class='container'>
+          <h1>Full stack example app</h1>
+          <p>number of notes created ${noteCount}</p>
+          <a href='/notes'>notes</a>
+          <img src='kuva.png' width='200' />
+        </div>
+      </body>
+    </html>
+`)
+}
+
+app.get('/', (req, res) => {
+  const page = getFrontPageHtml(notes.length)
+  res.send(page)
+})
+```
+
+まだ上記のコードを理解する必要はありません.
+
+HTMLページの内容は, テンプレート文字列として保存されていたり,
+その途中で変数を評価できるような文字列として保存されていたりします.
+ホームページの動的に変化する部分である, 保存されたノート数 (`noteCount`)は,
+テンプレート文字列の現在のノート数 (`note.length`) に置き換えられます.
+
+コード中にHTMLを書くのはもちろん賢明ではありませんが,
+従来のPHPプログラマーにとっては, これは慣例でした.
+
+従来のWebアプリケーションでは, ブラウザは物言うことができないものである.
+ブラウザはサーバからHTMLデータを取得するだけで, すべてのアプリケーションロジックはサーバ上にあります.
+サーバは, 例えば, ヘルシンキ大学のWeb-palvelinohjelmointiコースのようにJavaScrip, Python Flask (tietokantasovellusコースのように)またはRuby on Railsを用いて構築できます.
+
+サンプルアプリケーションでは, Node.jsのExpressフレームワークを利用しています.
+このコースでは, Node.jsとExpressを用いてWebサーバを作成します.
+
+## ブラウザ上でのアプリケーションの実行
+Developer toolを開いたままにしておいてください.
+🚫マークをクリックしてコンソールをクリアします.
+ノートページに行くと, ブラウザは4つのHTTPリクエストを行います:
+
+<img src="./figure/part0_08.png">
+
+すべてのリクエストには異なるタイプがあります.
+最初のリクエストタイプはドキュメントです.
+以下はページのHTMLコードです.
+
+<img src="./figure/part0_09.png">
+
+ブラウザに表示されたページとサーバから返されたHTMLコードを比較すると,
+コードにノートのリストが含まれていないことが分かります.
+HTMLのヘッドセクションにはscript-tagが含まれているため,
+ブラウザは`main.js`というJavaScriptファイルを取得します.
+
+取得したJavaScriptコードは以下の通りです.
+
+```js
+var xhttp = new XMLHttpRequest()
+
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    const data = JSON.parse(this.responseText)
+    console.log(data)
+
+    var ul = document.createElement('ul')
+    ul.setAttribute('class', 'notes')
+
+    data.forEach(function(note) {
+      var li = document.createElement('li')
+
+      ul.appendChild(li)
+      li.appendChild(document.createTextNode(note.content))
+    })
+
+    document.getElementById('notes').appendChild(ul)
+  }
+}
+
+xhttp.open('GET', '/data.json', true)
+xhttp.send()
+```
+
+上記のコードの詳細は今のところ重要ではありませんが,
+画像やテキストに面白さをもたせるためにのコードがいくつか入っています.
+しっかりとコーディングを始めるのはPart1からです.
+このPartのサンプルコードは, 実はこのコースのコーディングテクニックと全く関係がありません.
+
+  モダンなfetch APIでなく, なぜxhttp-objectが使われているか不思議に思う人もいるかもしれません.
+  これは, まだPromiseの話題に触れたくないことと, このPartにおいてコードは二の次だからです.
+  サーバへのリクエストを行うモダンな方法については, Part2で紹介します.
+
+`script`タグを取得した直後に, ブラウザはコードを実行します.
+
+最後の2行は, ブラウザがサーバのアドレス/data.jsonに対してHTTP GETリクエストを行うことを定義しています.
+
+```js
+xhttp.open('GET', '/data.json', true)
+xhttp.send()
+```
+
+各ノートに1つの`li`タグを追加します.
+すると各ノートのcontentフィールドのみが`li`タグの内容になります.
+rawデータに存在するタイムスタンプは, ここでは何も使用しません.
+
+```js
+data.forEach(function(note) {
+  var li = document.createElement('li')
+
+  ul.appendChild(li)
+  li.appendChild(document.createTextNode(note.content))
+})
+```
+
+次にDeveloper toolsの Consoleタブを開きます:
+
+<img src="./figure/part0_10.png">
+
+行頭にある小さな三角形をクリックすると, コンソールのテキストを展開できます.
+
+<img src="./figure/part0_11.png">
+
+コンソールの出力は, `console.log`コマンドによるものです.
+
+```js
+const data = JSON.parse(this.responseText)
+console.log(data)
+```
+
+サーバｋらデータを受信した後, コードはそれをコンソールに出力します.
+
+Consoleタブと`console.log`コマンドは, コースで頻繁に使用します.
+
+## Event handlersとCallback functions
+以下のコードの構造は少し変わっています.
+
+```js
+var xhttp = new XMLHttpRequest()
+
+xhttp.onreadystatechange = function() {
+  // code that takes care of the server response
+}
+
+xhttp.open('GET', '/data.json', true)
+xhttp.send()
+```
+
+サーバへの要求は最後の行で送信されますが, レスポンスを処理するコードはその上にあります.
+これはどうしてでしょうか?
+
+この行では,
+
+```js
+xhttp.onreadystatechange = function () {
+```
+
+リクエストを処理するxhttpオブジェクトに対して, `onreadystatechange`のイベントハンドラが定義されています.
+オブジェクトの状態が変化すると, ブラウザはイベントハンドラを呼び出します.
+この関数のコードは, `readyState`が`4`に等しいこと(これは操作が完了したことを表しています)と,
+レスポンスのステータスコードが200であることをチェックしています.
+
+```js
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    // code that takes care of the server response
+  }
+}
+```
+
+イベントハンドラを呼び出す仕組みは, JavaScriptでは非常に一般的です.
+イベントハンドラ関数はコールバック関数とよばれています.
+アプリケーションコードが, 関数そのものを呼び出すのではなく,
+実行環境であるブラウザが, イベントが発生したタイミングで関数を呼び出します.
+
+## Document Object Model (DOM)
+HTMLページは暗黙の木構造と考えることができます.
+
+```html
+html
+  head
+    link
+    script
+  body
+    div
+      h1
+      div
+        ul
+          li
+          li
+          li
+      form
+        input
+        input
+```
+
+同じ木構造がConsoleタブのElementsに表示されます.
+
+<img src="./figure/part0_12.png">
+
+ブラウザの機能は, HTMLの要素をツリーとして描画するという考え方に基づいています.
+
+Document Object Model (DOM)とは, Webページに対応する要素ツリーをプログラムで変更できるようにするAPIを指します.
+
+前のチャプターで紹介したJavaScriptのコードでは, DOM APIを用いてノートのリストをページに追加していました.
+
+次のコードは, `ul`に新しいノードを作成し, そのノードにいくつかの子ノードを追加します.
+
+```js
+var ul = document.createElement('ul')
+
+data.forEach(function(note) {
+  var li = document.createElement('li')
+
+  ul.appendChild(li)
+  li.appendChild(document.createTextNode(note.content))
+})
+```
+
+最後に, ulのツリーブランチは, ページ全体のHTMLツリーの適切な場所に接続されます.
+
+```js
+document.getElementById('notes').appendChild(ul)
+```
+
+## コンソールからのドキュメントオブジェクトの操作
