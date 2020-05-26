@@ -25,7 +25,7 @@ Webアプリケーションを開発する際には常に開いておくこと�
 
 コンソールは次のようになります:
 
-<img src="./figure/part0_01.png">
+<img src="https://fullstackopen.com/static/aaaefdadeccea5768728b3cdd41fd8f2/14be6/1e.png">
 
 Network タブが開かれていることを確認し, 次に示すように Disable Cache オプションをオンにします.
 ログを保存すると, ページがリロードされたときに, アプリケーションによって表示されたログを保存することができます.
@@ -41,20 +41,20 @@ Network タブには, ブラウザとサーバがどのように通信するか�
 - ブラウザはサーバから fullstack-exampleapp.herokuapp.com/ の内容を取得します.
 - そして, kuva.pngの画像をダウンロードします.
 
-<img src="./figure/part0_02.png">
+<img src="https://fullstackopen.com/static/af6f88822db737cac2ea80d9343756fc/14be6/2e.png">
 
 小さな画面では, コンソールのウィンドウを広げないと見えないかもしれません.
 
 最初のイベントをクリックすると, 何が起こっているかの詳細情報が表示されます.
 
-<img src="./figure/part0_03.png">
+<img src="https://fullstackopen.com/static/ddcd5afaeabfc1b0e8a4325bfeff90ee/14be6/3e.png">
 
 上部の General は, ブラウザがGETメソッドを使ってアドレス https://fullstack-exampleapp.herokuapp.com/ へのリクエストを行ったことを示しており,
 サーバのレスポンスにはステータスコード200が含まれていたために, リクエストが成功したことを示しています.
 
 リクエストとサーバのレスポンスにはいくつかのヘッダがあります:
 
-<img src="./figure/part0_04.png">
+<img src="https://fullstackopen.com/static/5e6569d4ad80edce4a03a25358b8f195/14be6/4e.png">
 
 上部にあるレスポンスヘッダは, レスポンスのサイズをバイト単位で表し, レスポンスの正確な時間を教えてくれます.
 重要なヘッダである Content-Typeは, レスポンスがutf-8形式のテキストファイルであり, その内容がHTMLでフォーマットされていることを教えてくれます.
@@ -63,7 +63,7 @@ Network タブには, ブラウザとサーバがどのように通信するか�
 Response タブには, 通常のHTMLページである応答データが表示されます.
 bodyセクションは, 画面に表示されるページの構造を決定します.
 
-<img src="./figure/part0_05.png">
+<img src="https://fullstackopen.com/static/4e49815c455c943b6eb14fe8cc0cefb3/14be6/5e.png">
 
 ページには`div`要素が含まれ, その中には見出し, ページノートへのリンク, `img`タグが含まれ,
 作成されたノートの数が表示されます.
@@ -71,7 +71,7 @@ bodyセクションは, 画面に表示されるページの構造を決定し�
 `img`タグがあるため, ブラウザはサーバから画像kuva.pngを取得するために2回目のHTTPリクエストを行います.
 リクエストの詳細は以下の通りです.
 
-<img src="./figure/part0_06.png">
+<img src="https://fullstackopen.com/static/f053fa9082a1ad72066fa193346d0378/14be6/6e.png">
 
 リクエストは https://fullstack-exampleapp.herokuapp.com/kuva.png に行われ, そのタイプは HTTP GET です.
 レスポンスヘッダを見ると, レスポンスサイズは89350バイトで, `Content-Type`は`image/png`なので,
@@ -80,7 +80,7 @@ png画像であることが分かります.
 
 ブラウザで https://fullstack-exampleapp.herokuapp.com/ を開くことで発生する一連のイベントは, 以下のシーケンス図のようになります.
 
-<img src="./figure/part0_07.png">
+<img src="https://fullstackopen.com/static/972354fefd202e82e2c4a64d4d7c6125/14be6/7e.png">
 
 最初に, ブラウザはサーバにHTTP GETリクエストを送信して, ページのHTMLコードを取得します.
 HTMLの`img`タグは, ブラウザにkuva.pngの画像を取得するように促します.
@@ -147,13 +147,13 @@ Developer toolを開いたままにしておいてください.
 🚫マークをクリックしてコンソールをクリアします.
 ノートページに行くと, ブラウザは4つのHTTPリクエストを行います:
 
-<img src="./figure/part0_08.png">
+<img src="https://fullstackopen.com/static/02ed5b206f76e1f9bcf4ad3ffff8a2b4/14be6/8e.png">
 
 すべてのリクエストには異なるタイプがあります.
 最初のリクエストタイプはドキュメントです.
 以下はページのHTMLコードです.
 
-<img src="./figure/part0_09.png">
+<img src="https://fullstackopen.com/static/8856aaf0012972e3b7d5b1dfc6aaa3f6/14be6/9e.png">
 
 ブラウザに表示されたページとサーバから返されたHTMLコードを比較すると,
 コードにノートのリストが含まれていないことが分かります.
@@ -206,7 +206,47 @@ xhttp.open('GET', '/data.json', true)
 xhttp.send()
 ```
 
-各ノートに1つの`li`タグを追加します.
+これは `Network`タブに表示されている一番下のリクエストです.
+
+ブラウザから直接 https://fullstack-exampleapp.heroku.com/data.json にアクセスしてみましょう.
+
+<img src="https://fullstackopen.com/static/cb83e4c1c89fd4bc662942457f30403e/14be6/10e.png">
+
+そこには, JSONの「生データ」のノートがあります.
+デフォルトでは, ブラウザはJSONデータを表示することがあまり得意ではありません.
+プラグインを使用することで, JSONデータのフォーマットを行うことができます.
+例えば, Chromeに<a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>をインストールして, リロードするときれいにフォーマットされたJSONデータが出力されます.
+
+<img src="https://fullstackopen.com/static/fd335c19a19f2176040834b7c5533193/14be6/11e.png">
+
+上記のノートページのJavaScriptコードは, ノートを含むJSONデータをダウンロードし,
+ノートの内容から箇条書きリストを形成しており, そのコードは以下のようになります.
+
+```js
+const data = JSON.parse(this.responseText)
+console.log(data)
+
+var ul = document.createElement('ul')
+ul.setAttribute('class', 'notes')
+
+data.forEach(function(note) {
+  var li = document.createElement('li')
+
+  ul.appendChild(li)
+  li.appendChild(document.createTextNode(note.content))
+})
+
+document.getElementById('notes').appendChild(ul)
+```
+
+このコードでは, 最初に`ul`タグを持つ順不同のリストを生成します.
+
+```js
+var ul = document.createElement('ul')
+ul.setAttribute('class', 'notes')
+```
+
+そして, 各ノートに1つの`li`タグを追加します.
 すると各ノートのcontentフィールドのみが`li`タグの内容になります.
 rawデータに存在するタイムスタンプは, ここでは何も使用しません.
 
@@ -221,11 +261,11 @@ data.forEach(function(note) {
 
 次にDeveloper toolsの Consoleタブを開きます:
 
-<img src="./figure/part0_10.png">
+<img src="https://fullstackopen.com/static/7b61ba46a7734400891ed78cf57011cb/14be6/12e.png">
 
 行頭にある小さな三角形をクリックすると, コンソールのテキストを展開できます.
 
-<img src="./figure/part0_11.png">
+<img src="https://fullstackopen.com/static/fd335c19a19f2176040834b7c5533193/14be6/13e.png">
 
 コンソールの出力は, `console.log`コマンドによるものです.
 
@@ -234,7 +274,7 @@ const data = JSON.parse(this.responseText)
 console.log(data)
 ```
 
-サーバｋらデータを受信した後, コードはそれをコンソールに出力します.
+サーバからデータを受信した後, コードはそれをコンソールに出力します.
 
 Consoleタブと`console.log`コマンドは, コースで頻繁に使用します.
 
@@ -302,7 +342,7 @@ html
 
 同じ木構造がConsoleタブのElementsに表示されます.
 
-<img src="./figure/part0_12.png">
+<img src="https://fullstackopen.com/static/081eb2d1f52d2536382d5d3efe0bc87f/14be6/14e.png">
 
 ブラウザの機能は, HTMLの要素をツリーとして描画するという考え方に基づいています.
 
@@ -329,4 +369,40 @@ data.forEach(function(note) {
 document.getElementById('notes').appendChild(ul)
 ```
 
-## コンソールからのドキュメントオブジェクトの操作
+## コンソールによるドキュメントオブジェクトの操作
+HTMLドキュメントのDOMツリーの最上位ノードを`document`オブジェクトと呼びます.
+DOM APIを使用して, Webページで様々な操作を実行できます.
+`Console`タブに`document`とタイプすることで, `document`オブジェクトにアクセスすることができます.
+
+<img src="https://fullstackopen.com/static/ac9364f4d597d187d271a1628a332e7d/14be6/15e.png">
+
+コンソールからページに新しいノートを追加してみましょう.
+
+まず, ページからノートのリストを取得します.
+リストはページの最初の`ul`要素にあります.
+
+```js
+list = document.getElementsByTagName('ul')[0]
+```
+
+次に, 新しい`li`要素を生成し, そこにテキストコンテンツを追加します.
+
+```js
+newElement = document.createElement('li')
+newElement.textContent = 'Page manipulation from console is easy'
+```
+
+そして, 新しい`li`要素をリストに追加します.
+
+```js
+list.appendChild(newElement)
+```
+
+<img src="https://fullstackopen.com/static/5971f5573de2bc91961f679e27430097/14be6/16e.png">
+
+ブラウザでページが更新されたとしても, 変更は永続的ではありません.
+ページがリロードされると, 変更がサーバに反映されていなかったために, 新しいノートは消えます.
+ブラウザが取得するJavaScriptコードは, https://fullstack-exampleapp.herokuapp.com/data.json のアドレスから
+JSONデータに基づいてノートのリストを生成します.
+
+### CSS
