@@ -405,7 +405,7 @@ list.appendChild(newElement)
 ブラウザが取得するJavaScriptコードは, https://fullstack-exampleapp.herokuapp.com/data.json のアドレスから
 JSONデータに基づいてノートのリストを生成します.
 
-### CSS
+## CSS
 NotesページのHTMLコードの`head`要素には`link`タグが含まれており,
 ブラウザは`main.css`というアドレスからCSSを取得しなければならないと判断しています.
 
@@ -456,7 +456,7 @@ JavaScriptのコードは`id`を使用して要素を検索します.
 永続的な変更を行う場合には, サーバ上のCSSに保存しなければなりません.
 
 
-### JavaScriptを含むページの読み込み -改訂
+## JavaScriptを含むページの読み込み -改訂
 ブラウザで https://fullstack-exampleapp.herokuapp.com/notes ページを開いたときに何が起こるかを再確認してみましょう.
 
 - ブラウザは, HTTP GETリクエストを使用して, コンテンツとページの構造を定義するHTMLコードをサーバから取得します.
@@ -466,7 +466,7 @@ JavaScriptのコードは`id`を使用して要素を検索します.
   コードは, HTTP GETリクエストを https://fullstack-exampleapp.herokuapp.com/data.json に送信し, JSONデータとしてノートを返します.
 - データが取得されると, ブラウザはイベントハンドラを実行し, DOM-APIを使用してページにノートをレンダリングします.
 
-### フォームとHTTP POST
+## フォームとHTTP POST
 次に, 新しいメモを追加する方法を見てみましょう.
 
 ノートページには`form`要素が含まれています.
@@ -536,7 +536,7 @@ Notesオブジェクトには2つのフィールドがあります.
 サーバは新しいノートをデータベースに保存しないため,
 Herokuがサービスを再起動すると, 新しいノートは消滅します.
 
-### AJAX
+## AJAX
 Notesページアプリケーションは, Web開発初期のスタイルを踏襲しており, Ajaxを使用しています.
 そのため, このアプリケーションは2000年代初頭のWeb技術の流行にしたがってつくられています.
 
@@ -560,3 +560,4 @@ JSONデータは, https://fullstack-exampleapp.herokuapp.com/data.json から取
 AJAXの技術は今では当たり前のように使われています.
 この用語は忘れさられて, 新しい世代の人たちはその言葉を聞いたことすらありません.
 
+## Single page app
