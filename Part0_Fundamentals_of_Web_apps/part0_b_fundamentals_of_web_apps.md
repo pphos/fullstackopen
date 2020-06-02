@@ -406,3 +406,135 @@ list.appendChild(newElement)
 JSONデータに基づいてノートのリストを生成します.
 
 ### CSS
+NotesページのHTMLコードの`head`要素には`link`タグが含まれており,
+ブラウザは`main.css`というアドレスからCSSを取得しなければならないと判断しています.
+
+Cascading Style Sheet (CSS)は, Webページに見た目を決定するために用いられるマークアップ言語です.
+
+取得されたCSSファイルは次のようになります.
+
+```css
+.container {
+  padding: 10px;
+  border: 1px solid;
+}
+
+.notes {
+  color: blue;
+}
+```
+
+ファイルでは2つのクラスセレクタを定義しています.
+これらは, ページの特定の部分を選択し, スタイルを適用するためのスタイル規則を定義するために用いられます.
+
+クラスセレクタの定義は常にピリオドではじまり, クラス名が含まれます.
+
+クラスは属性であり, HTML要素に追加できます.
+
+CSS属性は, `console`の`element`タブで確認できます.
+
+<img src="https://fullstackopen.com/static/4504fc2e95de826dd766aca1d0940ea4/14be6/17e.png">
+
+最も外側の`div`要素は, `container`クラスを持っており,
+ノートのリストを含む`ul`要素は, `notes`クラスを持っています.
+
+このCSSの規則では, `container`クラスを持つ要素は1ピクセル幅の枠で囲まれるように適宜されています.
+また, 要素に10ピクセルのパディングを設定しています.
+これにより, 要素のコンテンツと境界線の間に空白が追加されます.
+
+2番目のCSS規則では, ノートのテキストの色を青に設定しています.
+
+HTML要素は, クラス以外の属性も持つことができます.
+`div`要素に含まれているノートには`id`属性があります.
+JavaScriptのコードは`id`を使用して要素を検索します.
+
+`console`の`Elements`タブを使用すると, 要素のスタイルを変更できます.
+
+<img src="https://fullstackopen.com/static/ef664dbcddaeef64c5ff6e180e42e5ca/14be6/18e.png">
+
+`console`で行った変更は永続的ではありません.
+永続的な変更を行う場合には, サーバ上のCSSに保存しなければなりません.
+
+
+### JavaScriptを含むページの読み込み -改訂
+ブラウザで https://fullstack-exampleapp.herokuapp.com/notes ページを開いたときに何が起こるかを再確認してみましょう.
+
+- ブラウザは, HTTP GETリクエストを使用して, コンテンツとページの構造を定義するHTMLコードをサーバから取得します.
+- HTMLコード内のリンクにより, ブラウザは`main.css`のスタイルシートも取得します.
+- `main.js`も同じように取得します.
+- 次に, ブラウザがJavaScriptコードを実行します.
+  コードは, HTTP GETリクエストを https://fullstack-exampleapp.herokuapp.com/data.json に送信し, JSONデータとしてノートを返します.
+- データが取得されると, ブラウザはイベントハンドラを実行し, DOM-APIを使用してページにノートをレンダリングします.
+
+### フォームとHTTP POST
+次に, 新しいメモを追加する方法を見てみましょう.
+
+ノートページには`form`要素が含まれています.
+
+<img src="https://fullstackopen.com/static/2dbe9f6d3c9999766d2cbad6200fea40/14be6/20e.png">
+
+フォームのボタンがクリックされると, ブラウザはユーザの入力をサーバに送信します.
+`Network`タブを開いて, フォームの送信がどのようになるかを確認してみましょう.
+
+<img src="https://fullstackopen.com/static/7951d2221d80f63a78350106150d5e61/14be6/21e.png">
+
+驚くべきことに, フォームを送信すると, 合計5つのHTTPリクエストが発生します.
+最初のものはフォームの送信イベントです.
+これをより詳しく見ましょう.
+
+<img src="https://fullstackopen.com/static/ac09c143991ad160bdaa1c1381d93f7b/14be6/22e.png">
+
+これは`new_note`のサーバアドレスへのHTTP POSTリクエストです.
+サーバはHTTPのステータスコード302で応答します.
+これはURLリダイレクトを意味しており, サーバはブラウザに対して,
+ヘッダの`Location`で定義されたアドレスへの新しいHTTP GETリクエストを行うように要求しています.
+
+したがって, ブラウザはノートページをリロードします.
+リロードにより, スタイルシートの取得 (`main.css`),
+JavaScriptコードの取得 (`main.js`),
+ノートの生データの取得 (`data.json`)という3つのHTTPリクエストが発生します.
+
+`Network`タブには, フォームで送信されたデータも表示されます.
+
+<img src="https://fullstackopen.com/static/baad2297bb966ed9387cb3a0d79fa4f8/14be6/23e.png">
+
+`form`タグには`action`および`method`属性があり,
+フォームの送信が`new_note`というアドレスへのHTTP POSTリクエストとして行われることを定義しています.
+
+<img src="https://fullstackopen.com/static/9463d1dca4170015c47e79065ff98820/14be6/24e.png">
+
+POSTリクエストを処理するサーバ上のコードは単純です.
+(注: 以下のコードはサーバ上に存在し, ブラウザによって取得されたJavaScriptコード上には存在しません.)
+
+```js
+app.post('/new_note', (req, res) => {
+  notes.push({
+    content: req.body.note,
+    date: new Date(),
+  })
+
+  return res.redirect('/notes')
+})
+```
+
+データはPOSTリクエストのbodyとして送信されます.
+
+サーバは, リクエストオブジェクト`req`の`req.body`フィールドにアクセスすることでデータにアクセスできます.
+
+サーバは新しいノートオブジェクトを作成し, それを`notes`という配列に追加します.
+
+```js
+notes.push({
+  content: req.body.note,
+  date: new Date(),
+})
+```
+
+Notesオブジェクトには2つのフィールドがあります.
+`content`にはノートの実際のコンテンツが含まれ,
+`date`にはノートが作成された日時が含まれます.
+サーバは新しいノートをデータベースに保存しないため,
+Herokuがサービスを再起動すると, 新しいノートは消滅します.
+
+
+
