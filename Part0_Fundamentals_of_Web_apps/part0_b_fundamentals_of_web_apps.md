@@ -580,3 +580,94 @@ Notesページアプリケーションは, SPAスタイルのアプリケーシ�
 ノートをレンダリングするロジックはブラウザで実行されますが,
 ページはまた新しいノートを追加するための従来の方法を使用しています.
 データはフォーム送信でサーバに送信され, サーバはブラウザにリダイレクトでNoteページをリロードするように指示します.
+
+サンプルアプリケーションのSPAは, https://fullstack-exampleapp.herokuapp.com/spa から利用できます.
+一見すると, このアプリケーションは最初に紹介したものと全く同じに見えます.
+HTMLコードはほぼ同じですが, JavaScriptファイル(`spa.js`)が異なっており,
+`form`タグの定義方法に若干の変更があります.
+
+<img src="https://fullstackopen.com/static/cb1893b2f18168168b3337ef994f0347/14be6/25e.png">
+
+フォームには, 入力データの送信方法と送信先を定義する`action`または`method`属性がありません.
+
+`Network`タブを開き,  🚫をクリックして空にします.
+ここで新しいノートを作成すると, ブラウザがサーバに1つのリクエストしか送信していないことに気づくでしょう.
+
+<img src="https://fullstackopen.com/static/07beb53097a520517c1c28ff17fc907a/14be6/26e.png">
+
+`new_note_spa`へのPOSTリクエストには, 新しいノートがJSONデータとして含まれており,
+そのJSONデータには, ノートのコンテンツ(`content`)とタイムsタンプ(`date`)の両方が含まれています.
+
+```js
+{
+  content: "single page app does not reload the whole page",
+  date: "2019-05-25T15:15:59.905Z"
+```
+
+リクエストの`Content-Type`ヘッダーは, 含まれるデータがJSON形式で表されることをサーバに通知します.
+
+<img src="https://fullstackopen.com/static/5819436c98e4cce143fce3fe9bc534b9/14be6/27e.png">
+
+このヘッダーがないと, サーバはデータを正しく解析する方法を知ることができません.
+
+サーバは, ステータスコード201で応答します.
+今回はサーバがリダイレクト要求をせず, ブラウザは同じページにとどまり, それ以上のHTTPリクエストを送信しません.
+
+SPA版のアプリケーションでは, 従来の方法でフォームデータを送信するのではなく,
+サーバから取得したJavaScriptコードを使用しています.
+このコードの詳細を理解することはまだ重要ではありませんが, 少し見ていきましょう.
+
+```js
+var form = document.getElementById('notes_form')
+form.onsubmit = function(e) {
+  e.preventDefault()
+
+  var note = {
+    content: e.target.elements[0].value,
+    date: new Date(),
+  }
+
+  notes.push(note)
+  e.target.elements[0].value = ''
+  redrawNotes()
+  sendToServer(note)
+}
+```
+
+`document.getElementById('notes_form')`は, ページから`form`要素を取得し,
+フォーム送信イベントを処理するためのイベントハンドラを登録するようにコードに指示します.
+イベントハンドラはすぐに`e.preventDefault()`メソッドを呼び出し, フォーム送信のデフォルト処理を防ぎます.
+デフォルトのメソッドはサーバにデータを送信し, 新しいGETリクエストを発生させますが, これは望ましくありません.
+
+その後, イベントハンドラは新しいノートを作成し, それを`notes.push(note)`コマンドでノートリストに追加し,
+ページ上のノートリストを再表示し, 新しいノートをサーバに送信します.
+
+ノートをサーバに送信するためのコードは以下の通りです.
+
+```js
+var sendToServer = function(note) {
+  var xhttpForPost = new XMLHttpRequest()
+  // ...
+
+  xhttpForPost.open('POST', '/new_note_spa', true)
+  xhttpForPost.setRequestHeader(
+    'Content-type', 'application/json'
+  )
+  xhttpForPost.send(JSON.stringify(note))
+}
+```
+
+コードは, データがHTTP POSTリクエストで送信され,
+データ型がJSONであることを決定します.
+データ型は`Content-type`ヘッダーで決定されます.
+次に, データはJSON文字列として送信されます.
+
+アプリケーションコードは https://github.com/mluukkai/example_app で入手できます.
+このアプリケーションはコースの概念を示すためだけのものであることを覚えておいてください.
+このコードは, ある意味では悪い開発スタイルを踏襲しており,
+独自のアプリケーションを作成する際のお手本として使用すべきではありません.
+使用されているURLについても同じことが言えます.
+新しいノートが送信されるURLである`new_note_spa`は,
+現在のベストプラクティスに準拠していません.
+
+## JavaScriptライブラリ
