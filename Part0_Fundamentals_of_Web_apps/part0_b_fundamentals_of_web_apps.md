@@ -747,3 +747,94 @@ JavaScriptの世界は急速に発展しており, それ自体に一連の課�
 設定ではなくコーディングから始めることができます.
 設定を完全に回避することはできませんが,
 最悪の設定地獄を回避しながら, 次の数週間は陽気に前に進むことができます.
+
+## Exercises 0.1.-0.6.
+演習はGitHub経由で提出し, <a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">提出システム</a>
+で提出済みとして演習にマークをつけることで提出されます.
+
+すべての演習を同じリポジトリに送信するか, 複数の異なるリポジトリを使用できます.
+異なるPartの演習を同じリポジトリに送信する場合は, ディレクトリに適切な名前をつけてください.
+プライベートリポジトリを使用して演習を提出する場合には, collaboratorとして`mluukkai`を追加してください.
+
+提出リポジトリ内のディレクトリの名前をつける良い方法の一つは以下のようになります.
+
+```
+part0
+part1
+  courseinfo
+  unicafe
+  anecdotes
+part2
+  phonebook
+  countries
+```
+
+したがって, 各パートには独自のディレクトリがあり, そこにはPart1のunicafe演習のように,
+各演習セットのためのディレクトリが含まれています.
+
+演習は<b>一度に1つずつ</b>提出されます.
+あるパートの演習を提出した後は, そのパートの演習を追加で提出することはできません.
+
+
+## 0.1: HTML
+Mozillaの<a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics">HTMLチュートリアル</a>を読んでHTMLの基本を確認してください.
+
+この演習はチュートリアルを読むだけで十分です.
+
+## 0.2: CSS
+Mozillaの<a href="https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics">CSSチュートリアル</a>を読んでCSSの基本を確認してください.
+
+この演習はチュートリアルを読むだけで十分です.
+
+## 0.3: HTML forms
+Mozillaの<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form">HTML formチュートリアル</a>を読んでHTMLフォームの基本について学んでください.
+
+この演習はチュートリアルを読むだけで十分です.
+
+## 0.4: new note
+JavaScriptを含むページの読み込み-改訂の節で, https://fullstack-exampleapp.herokuapp.com/notes
+を開くことによって引き起こされた一連のイベントは, <a href="https://www.geeksforgeeks.org/unified-modeling-language-uml-sequence-diagrams/">シーケンス図</a>として描かれています.
+
+この図は, <a href="https://www.websequencediagrams.com/">websequencediagrams</a>サービスを用いて次のように作成されました.
+
+```
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
+```
+
+ユーザが https://fullstack-exampleapp.herokuapp.com/notes に新しいノートを作成し,
+テキストフィールドに何かを書き込んで `Submit`ボタンをクリックするシーンを示す同様の図を作成してください.
+
+必要に応じて, ブラウザ上やサーバ上の操作を図のコメントとして表示してください.
+
+図はシーケンス図である必要はありません.
+イベントを示すための賢明な方法があれば何でも構いません.
+
+この演習を行うために必要な全ての情報と, 次の2つ演習は, このパートの本文に記載されています.
+これらの演習のアイディアは, テキストをもう一度読み返して, どこで何が起こっているのかをしっかり考えることです.
+アプリケーションのコードを読み解く必要はありませんが, もちろんそうしても問題ありません.
+
+## 0.5 Single page app
+ユーザが https://fullstack-exampleapp.herokuapp.com/spa のノートアプリのSPA版にアクセスした場合のシーンを表した図を作成してください.
+
+## 0.6 New note
+ユーザがSPA版のアプリケーションを使用して新しいメモを作成するシーンを表す図を作成してください.
+
+これで最後の演習となりましたが, そろそろ自分の回答をGitHubにプッシュして, 提出システムで行った演習をマークしておきましょう.
