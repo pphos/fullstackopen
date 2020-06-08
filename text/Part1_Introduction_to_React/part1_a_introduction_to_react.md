@@ -146,4 +146,66 @@ const App = () => {
 ```
 
 中括弧内のJavaScriptコードはすべて評価され,
-この評価結果はコンポーネントによって生成されてあHTMLの定義された場所に埋め込まれます.
+この評価結果はコンポーネントによって生成されてHTMLの定義された場所に埋め込まれます.
+
+## JSX
+ReactコンポーネントがHTMLマークアップを返しているように思えますが, それは正しくありません.
+Reactコンポーネントのレイアウトは, 主にJSXを用いて記述されています.
+JSXはHTMLのように見えますが, 実はJavaScriptの記述法を扱っています.
+内部的には, Reactコンポーネントによって返されるJSXはJavaScriptにコンパイルされます.
+
+コンパイル後のアプリケーションコードは次のようになります.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const App = () => {
+  const now = new Date()
+  const a = 10
+  const b = 20
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'p', null, 'Hello world, it is ', now.toString()
+    ),
+    React.createElement(
+      'p', null, a, ' plus ', b, ' is ', a + b
+    )
+  )
+}
+
+ReactDOM.render(
+  React.createElement(App, null),
+  document.getElementById('root')
+)
+```
+
+コンパイルは<a href="https://babeljs.io/repl/">Babel</a>によって処理されます.
+`create-react-app`によって作成されたプロジェクトは, 自動的にコンパイルされるように構成されています.
+このトピックの詳細については, コースのPart7で学習します.
+
+JSXを使用せずにReactを"pure JavaScript"として記述することもできます.
+とはいえ, まともな考えを持った人は, 実際にはそんなことはしないでしょう.
+
+実際には, JSXはHTMLとよく似ていますが, JSXを使用すると,
+波括弧内に適切なJavaScriptを記述して動的コンテンツを簡単に埋め込むことができます.
+
+JSXの考え方は, Java Springに沿ってサーバサイドで使用されている
+Thymeleafのような多くのテンプレート言語と非常によく似ています.
+
+JSXは「XMLのようなもの」です. つまり, 全てのタグを閉じる必要があります.
+例えば, 改行は空の要素であり, HTMLでは次のように記述できます.
+
+```html
+<br>
+```
+
+しかし, JSXを作成するときには, 以下のようにタグを閉じる必要があります.
+
+```js
+<br />
+```
+
+## Multi components
