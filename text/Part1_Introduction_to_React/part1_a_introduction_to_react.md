@@ -50,5 +50,100 @@ ReactDOM.render(<App />, document.getElementById('root'))
 `App.js`, `App.css`, `App.test.js`, `logo.svg`, `setupTest.js`, `serviceWorker.js`のファイルは,
 現在のアプリケーションでは不要なので削除することができます.
 
+## Component
+`index.js`ファイルは, `App`という名前のReact-componentを定義し, 最後の行にある以下のコマンド
 
+```js
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
+は, コンテンツをdiv要素にレンダリングし, `public/index.html`で定義され, `root`のid属性を持ちます.
+
+デフォルトでは, `public/index.html`は空です.
+このファイルにHTMLを追加することができます.
+しかし, Reactを使用する場合には, レンダリングする必要がある全てのコンテンツは通常,
+Reactコンポーネントとして定義されています.
+
+コンポーネントを定義するコードを詳しく見てみましょう.
+
+```js
+const App = () => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+```
+
+ご想像の通り, コンポーネントは`div`タグとしてレンダリングされ, Hello worldを含む`p`タグをラップします.
+
+技術的には, コンポーネントはJavaScriptの関数として定義されます.
+以下は引数を取らない関数です.
+
+```js
+() => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+```
+
+次に, 関数は定数変数`App`に割り当てられます.
+
+```js
+const App = ...
+```
+
+JavaScriptで関数を定義する方法は複数あります.
+ここでは, ECMAScript6 (ES6)と呼ばれるJavaScriptの新しいバージョンで導入されたアロー関数を使用しています.
+
+この関数は一つの式のみで構成されているので, 次のコードのように省略表現を用いました.
+
+```js
+const App = () => {
+  return (
+    <div>
+      <p>Hello world</p>
+    </div>
+  )
+}
+```
+
+つまり, 関数は式の値を返します.
+
+コンポーネントを定義する関数には, 任意の種類のJavaScriptのコードが含まれている可能性があります.
+コンポーネントを以下のように変更して, コンソールで何が起こるかを観察してみてください.
+
+```js
+const App = () => {
+  console.log('Hello from component')
+  return (
+    <div>
+      <p>Hello world</p>
+    </div>
+  )
+}
+```
+
+コンポーネント内で動的コンテンツをレンダリングすることもできます.
+
+次のようにコンポーネントを変更してください.
+
+```js
+const App = () => {
+  const now = new Date()
+  const a = 10
+  const b = 20
+
+  return (
+    <div>
+      <p>Hello world, it is {now.toString()}</p>
+      <p>
+        {a} plus {b} is {a + b}
+      </p>
+    </div>
+  )
+}
+```
+
+中括弧内のJavaScriptコードはすべて評価され,
+この評価結果はコンポーネントによって生成されてあHTMLの定義された場所に埋め込まれます.
