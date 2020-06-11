@@ -64,5 +64,92 @@ x = 4               // causes an error
 -<a href="https://youtu.be/sjyJBL5fkp8">var, let and const - ES6 JavaScript Features</a>
 
 ## 配列
+以下は配列とその使用例です.
 
+```js
+const t = [1, -1, 3]
+
+t.push(5)
+
+console.log(t.length) // 4 is printed
+console.log(t[1])     // -1 is printed
+
+t.forEach(value => {
+  console.log(value)  // numbers 1, -1, 3, 5 are printed, each to own line
+})
+```
+
+上記の例で注目すべきところは, 配列が`const`として定義されているにもかかわらず,
+配列の内容を変更できるという事実です.
+配列はオブジェクトであるので, 変数は常に同じオブジェクトを指しています.
+しかし, 新しいアイテムが追加されると, 配列の内容は変化します.
+
+配列のアイテムを反復処理する1つの方法は, `forEach`を使用することです.
+`forEach`は, アロー構文を使用して定義された関数をパラメータとして受け取ります.
+
+```js
+value => {
+  console.log(value)
+}
+```
+
+`forEach`は, 配列内の各項目の関数を呼び出し, 常に個々のアイテムをパラメータとして渡します.
+`forEach`のパラメータとしての関数は, 他のパラメータを受けることもできます.
+
+前回の例では, `push`メソッドを使用して新しいアイテムが配列に追加されました.
+Reactを使用する場合, 関数型プログラミングの手法がよく使用されます.
+関数型プログラミングパラダイムの特徴の1つは, 不変のデータ構造を使用することです.
+Reactのコードでは, `concat`メソッドを使用することをおすすめします.
+これは, アイテムを配列に追加せずに, 古い配列の内容と新しいアイテムの両方が含まれる新しい配列を生成します.
+
+```js
+const t = [1, -1, 3]
+
+const t2 = t.concat(5)
+
+console.log(t)  // [1, -1, 3] is printed
+console.log(t2) // [1, -1, 3, 5] is printed
+```
+
+`t.concat(5)`のメソッド呼び出しは, 古い配列に新しいアイテムを追加しませんが,
+古い配列のアイテムを含むだけでなく, 新しいアイテムも含む新しい配列を返します.
+
+配列に対して定義された便利なメソッドがたくさんあります.
+`map`目ドッドを使用する短いサンプルを見てみましょう.
+
+```js
+const t = [1, 2, 3]
+
+const m1 = t.map(value => value * 2)
+console.log(m1)   // [2, 4, 6] is printed
+```
+
+古い配列に基づいて, `map`は新しい配列を作成し, パラメータとして与えられた関数を使用してアイテムを作成します.
+この例では, 元の値を2倍しています.
+
+`map`は配列を完全に異なるものに変換することもできます.
+
+```js
+const m2 = t.map(value => '<li>' + value + '</li>')
+console.log(m2)
+// [ '<li>1</li>', '<li>2</li>', '<li>3</li>' ] is printed
+```
+
+ここでは, 整数値で埋め尽くされた配列を`map`メソッドを使ってHTMLの文字列を含む配列に変換しています.
+このコースのパート2では, Reactで`map`を非常に頻繁に使用されているところが見られます.
+
+配列の個々のアイテムは, 分割代入を使用して変数に簡単に代入できます.
+
+```js
+const t = [1, 2, 3, 4, 5]
+
+const [first, second, ...rest] = t
+
+console.log(first, second)  // 1, 2 is printed
+console.log(rest)          // [3, 4 ,5] is printed
+```
+分割代入のおかげで, `first`と`second`の変数は配列の最初の2つの整数を値として受け取ります.
+残りの整数は, 独自の配列に集められて, `rest`変数に代入されます.
+
+## オブジェクト
 
