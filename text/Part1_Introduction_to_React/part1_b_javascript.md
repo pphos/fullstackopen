@@ -282,5 +282,132 @@ const result = average(2, 5)
 
 このコースでは, アロー構文を使用して全ての関数を定義します.
 
+## Exercises 1.3. -1.5.
+前回の演習で取り組んだアプリケーションの構築を続けます.
+提出されたアプリケーションの最終的な状態のみに関心があるため,
+同じプロジェクトにコードを書き込むことができます.
+
+<em>Pro-tip</em>コンポーネントが受け取る`props`の構造に問題が発生する場合があります.
+物事をより明確にする良い方法は, 次のように, `props`をコンソールに表示することです.
+
+```js
+const Header = (props) => {
+  console.log(props)
+  return <h1>{props.course}</h1>
+}
+```
+
+## 1.3: course information step3
+アプリケーションでオブジェクトを使用しましょう.
+`App`コンポーネントの変数定義を次のように変更し,
+アプリケーションが引き続き動作するようにリファクタリングします.
+
+```js
+const App = () => {
+  const course = 'Half Stack application development'
+  const part1 = {
+    name: 'Fundamentals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'State of a component',
+    exercises: 14
+  }
+
+  return (
+    <div>
+      ...
+    </div>
+  )
+}
+```
+
+## 1.4: course information step4
+オブジェクトを配列に内に置きましょう.
+`App`の変数定義を以下のような形に修正し, それに合わせて他の部分も修正しましょう.
+
+```js
+const App = () => {
+  const course = 'Half Stack application development'
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
+
+  return (
+    <div>
+      ...
+    </div>
+  )
+}
+```
+
+<em>注意</em>: この時点では, 常に3つのアイテムがあると想定しているので, ループを使用して配列を処理する必要はありません.
+配列内のアイテムに基づいたコンポーネントのレンダリングについては, コースの次のパートで詳しく説明します.
+
+ただし, 異なるオブジェクトを`App`コンポーネントから`Content`および`Total`コンポーネントに個別の`props`として渡さないでください.
+代わりに, それらを配列として直接渡してください.
+
+```js
+const App = () => {
+  // const definitions
+
+  return (
+    <div>
+      <Header course={course} />
+      <Content parts={parts} />
+      <Total parts={parts} />
+    </div>
+  )
+}
+```
+
+## 1.5: course information step5
+変更をさらに一歩進めましょう.
+`course`とその`parts`を1つのJavaScriptオブジェクトに変更しましょう.
+壊れているものはすべて修正しましょう.
+
+```js
+const App = () => {
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
+
+  return (
+    <div>
+      ...
+    </div>
+  )
+}
+```
+
 
 
