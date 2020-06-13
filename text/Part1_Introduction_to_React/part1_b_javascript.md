@@ -152,4 +152,61 @@ console.log(rest)          // [3, 4 ,5] is printed
 残りの整数は, 独自の配列に集められて, `rest`変数に代入されます.
 
 ## オブジェクト
+JavaScriptでオブジェクトを定義する方法はいくつかあります.
+非常に一般的なオブジェクトの定義法の一つは, オブジェクトリテラルを使用であり,
+プロパティを中括弧内に並べることにより実現されます.
+
+```js
+const object1 = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+}
+
+const object2 = {
+  name: 'Full Stack web application development',
+  level: 'intermediate studies',
+  size: 5,
+}
+
+const object3 = {
+  name: {
+    first: 'Dan',
+    last: 'Abramov',
+  },
+  grades: [2, 3, 5, 3],
+  department: 'Stanford University',
+}
+```
+
+プロパティの値は, 整数, 文字列, 配列, オブジェクトなど, 任意の型をしているすることができます.
+
+オブジェクトのプロパティは, ドット記法を使用するか, カッコを使用して参照されます.
+
+```js
+console.log(object1.name)         // Arto Hellas is printed
+const fieldName = 'age'
+console.log(object1[fieldName])    // 35 is printed
+```
+
+ドット記法やカッコを使用して, オブジェクトにプロパティを追加することもできます.
+
+```js
+object1.address = 'Helsinki'
+object1['secret number'] = 12341
+```
+
+ドット記法を使用する場合, `secret number`はスペース文字があるため有効なプロパティ名ではないため,
+後者のプロパティの追加はカッコを使用して行う必要があります.
+
+当然のことながら, JavaScriptのオブジェクトにはメソッドを含めることもできます.
+ただし, このコースでは, 独自のメソッドを使用してオブジェクトを定義する必要がありません.
+そのため, このコースでは簡単にしか説明しません.
+
+オブジェクトは, いわゆるコンストラクタ関数を使用して定義することもでき,
+その結果, Javaのクラスなど, 他の多くのプログラミング言語を彷彿とさせるメカニズムになります.
+このような類似性があるにもかかわらず, JavaScriptにはオブジェクト指向プログラミング言語のような意味でのクラスはありません.
+しかし, ES6からクラス構文が追加され, オブジェクト指向クラスの構造化に役立つ場合があります.
+
+
 
