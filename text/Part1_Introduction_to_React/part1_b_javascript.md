@@ -209,4 +209,78 @@ object1['secret number'] = 12341
 しかし, ES6からクラス構文が追加され, オブジェクト指向クラスの構造化に役立つ場合があります.
 
 
+## 関数
+アロー関数については, すでに紹介しました.
+省略をせずに, アロー関数を定義するまでの完全な流れは以下の通りです.
+
+```js
+const sum = (p1, p2) => {
+  console.log(p1)
+  console.log(p2)
+  return p1 + p2
+}
+```
+
+関数は以下のコードで期待通りに呼び出されます.
+
+```js
+const result = sum(1, 5)
+console.log(result)
+```
+
+パラメータが1つだけの場合は, 定義からカッコを省くことができます.
+
+```js
+const square = p => {
+  console.log(p)
+  return p * p
+}
+```
+
+関数が単一の式のみを含む場合は, 中括弧は必要ありません.
+この場合, 関数は式の結果のみを返します.
+コンソール表示のコード削除すると, 関数定義をさらに短くすることができます.
+
+```js
+const square = p => p * p
+```
+
+この形式は, `map`メソッドなどで配列を操作するときに特に便利です.
+
+```js
+const t = [1, 2, 3]
+const tSquared = t.map(p => p * p)
+// tSquared is now [1, 4, 9]
+```
+
+アロー関数は, わずか数年前にES6でJavaScriptに追加されました.
+ES6以前は, 関数を定義する唯一の方法は, `function`キーワードを使用することでした.
+
+関数を定義する方法は２つあります.
+1つは関数宣言で名前をつけることです.
+
+```js
+function product(a, b) {
+  return a * b
+}
+
+const result = product(2, 6)
+// result is now 12
+```
+
+関数を定義するもう一つの方法は, 関数式を使用することです.
+この場合, 関数に名前をつける必要はなく, 定義はコードの残りの部分にずっと存在します.
+
+```js
+const average = function(a, b) {
+  return (a + b) / 2
+}
+
+const result = average(2, 5)
+// result is now 3.5
+```
+
+このコースでは, アロー構文を使用して全ての関数を定義します.
+
+
 
