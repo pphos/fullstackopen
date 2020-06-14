@@ -532,3 +532,45 @@ setTimeout(arto.greet.bind(arto), 1000)
 JavaScriptで`this`がどのように動作するかをよりよく理解したい場合には,
 インターネット上にはそのトピックについての資料がたくさんあります.
 <a href="https://egghead.io/">egghead.io</a>による<a href="https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth">Understand JavaScript's this Keyword in Depth</a>が非常におすすめです.
+
+## クラス
+以前に述べたように, JavaScriptにはオブジェクト指向プログラミング言語のようなクラスの仕組みはありません.
+しかし, JavaScriptにはオブジェクト指向クラスのシミュレートを可能にする機能があります.
+
+ES6でJavaScriptに導入されたクラス構文をざっと見てみましょう.
+これにより, JavaScriptでのクラス (またはクラスのようなもの) 定義が大幅に簡略化されています.
+
+次の例では, `Person`というクラスと2つの`Person`オブジェクトを定義しています.
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name
+    this.age = age
+  }
+  greet() {
+    console.log('hello, my name is ' + this.name)
+  }
+}
+
+const adam = new Person('Adam Ondra', 35)
+adam.greet()
+
+const janja = new Person('Janja Garnbret', 22)
+janja.greet()
+```
+
+構文に関していえば, クラスとクラスから作成されるオブジェクトはJavaのクラスとオブジェクトと非常によく似ています.
+これらの振る舞いもJavaオブジェクトによく似ています.
+コアな部分では, JavaScriptのプロトタイピング継承に基づいたオブジェクトであることに変わりありません.
+JavaScriptは基本的に, `Boolean`, `Null`, `Undefined`, `Number`, `String`, `Symbol`, `Object`の型しか定義されていないので,
+どちらのオブジェクトの型も実際には`Object`です.
+
+クラス構文の導入は物議を醸しました.
+詳細については<a href="https://github.com/petsel/not-awesome-es6-classes">Not Awesome:ES6 Classes</a>や
+<a href="https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65">Is "Class" In ES6 The New "Bad" Part?</a>を確認してみてください.
+
+ES6のクラス構文は古いバージョンのReactとNode.jsでよく使用されているため, このコースでも理解しておくことは有益です.
+このコースではReactの新しいhooksの機能を使用しているため, JavaScriptのクラス構文を具体的に使用することはありません.
+
+## JavaScriptの資料
