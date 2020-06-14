@@ -409,5 +409,126 @@ const App = () => {
 }
 ```
 
+## オブジェクトメソッドとthis
+このコースではReact hooksを含むReactのバージョンを使用しているために, オブジェクトメソッドを定義する必要はありません.
+<em>この章の内容はコースには関係ありません</em>が, 多くの意味で知っておくと良いことは確かです.
+特にhooks以前のReactを使う場合は, この章のトピックを理解しておく必要があります.
 
+アロー感および`function`キーワードをを用いて定義された関数は,
+オブジェクト時代を指すキーワード`this`に対する挙動が大きく異なります.
 
+関数であるプロパティを定義することで, オブジェクトにメソッドを割り当てることができます.
+
+```js
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.greet()  // "hello, my name is Arto Hellas" gets printed
+```
+
+オブジェクト作成後でも, メソッドをオブジェクトに割り当てることができます.
+
+```js
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+arto.growOlder = function() {
+  this.age += 1
+}
+
+console.log(arto.age)   // 35 is printed
+arto.growOlder()
+console.log(arto.age)   // 36 is printed
+```
+
+オブジェクトを少し変更してみましょう.
+
+```js
+const arto = {
+  name: 'Arto Hellas',
+  age: 35,
+  education: 'PhD',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+  doAddition: function(a, b) {
+    console.log(a + b)
+  },
+}
+
+arto.doAddition(1, 4)        // 5 is printed
+
+const referenceToAddition = arto.doAddition
+referenceToAddition(10, 15)   // 25 is printed
+```
+
+オブジェクトには, パラメータとして与えられた数値の合計を計算する`doAddition`メソッドがあります.
+メソッドは通常の方法で呼び出され, `arto.doAddition(1, 4)`を使用するか,
+メソッドの参照を変数に格納し, `referenceToAddition(10, 15)`の変数を介して呼び出します.
+
+`greet`メソッドで同じことを行おうとすると, 問題が生じます.
+
+```js
+arto.greet()       // "hello, my name is Arto Hellas" gets printed
+
+const referenceToGreet = arto.greet
+referenceToGreet() // prints "hello, my name is undefined"
+```
+
+参照を介してメソッドを呼び出すと, メソッドは元の`this`が何であったかを認識できなくなります.
+他の言語とは異なり, JavaScriptでは, `this`の値はメソッドの呼び出し方法に基づいて定義されます.
+参照を介してメソッドを呼び出すと, `this`の値はいわゆるグローバルオブジェクトになり,
+最終的な結果はソフトウェア開発者が本来意図していたものとは異なることがよくあります.
+
+JavaScriptのコードを作成するときに`this`を認識できないと, 潜在的な問題が発生します.
+多くの場合, ReactまたはNode (より具体的にはWebブラウザのJavaScriptエンジン)が,
+開発者が定義したオブジェクト内のメソッドを呼び出す必要がある状況が発生します.
+しかし, このコースでは, "this-less"なJavaScriptを使用することで, これらの問題を回避しています.
+
+`this`の消失につながる一つの状況は, `setTimeout`関数を使用して
+`arto`オブジェクトの`greet`関数を呼び出すようにタイムアウトを設定したときに発生します.
+
+```js
+const arto = {
+  name: 'Arto Hellas',
+  greet: function() {
+    console.log('hello, my name is ' + this.name)
+  },
+}
+
+setTimeout(arto.greet, 1000)
+```
+
+前述したように, JavaScriptにおける`this`の値は, メソッドの呼び出し方法により定義されます.
+`setTimeout`関数を呼び出しているとき, 実際にメソッドを呼び出すのはJavaScriptエンジンであり,
+その時点で, `this`はグローバルオブジェクトを参照します.
+
+元の`this`を保存するための方法はいくつかあります.
+その一つが`bind`メソッドを使うことです.
+
+```js
+setTimeout(arto.greet.bind(arto), 1000)
+```
+
+`arto.greet.bind(arto)`を呼び出すと, メソッドがどこでどのように呼ばれているかに関係なく,
+`this`が`Arto`を指すようにバインドされた新しい関数が作成されます.
+
+アロー関数を使用することで, `this`に関連する問題のいくつかを解決することができます.
+ただし, `this`が全く機能しないので, オブジェクトのメソッドとして使用すべきではありません.
+`this`の挙動については,  後ほどアロー関数との関係で説明します.
+
+JavaScriptで`this`がどのように動作するかをよりよく理解したい場合には,
+インターネット上にはそのトピックについての資料がたくさんあります.
+<a href="https://egghead.io/">egghead.io</a>による<a href="https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth">Understand JavaScript's this Keyword in Depth</a>が非常におすすめです.
