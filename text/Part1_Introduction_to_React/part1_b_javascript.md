@@ -574,3 +574,15 @@ ES6のクラス構文は古いバージョンのReactとNode.jsでよく使用�
 このコースではReactの新しいhooksの機能を使用しているため, JavaScriptのクラス構文を具体的に使用することはありません.
 
 ## JavaScriptの資料
+インターネット上には, JavaScriptの良い資料と良くない資料の両方が存在します.
+このページのJavaScriptの機能に関するリンクのほとんどは,
+Mozillaの<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Javascript Guide</a>を参照しています.
+
+すぐにMozillaのサイトで<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript">A re-introduction to JavaScript (JS tutorial)</a>を読むことをおすすめします.
+
+JavaScriptについて深くしりたい場合には, インターネット上に<a href="https://github.com/getify/You-Don't-Know-JS">You-Dont-Know-JS</a>と呼ばれる優れた無料の書籍のシリーズがあります.
+
+JavaScriptを学習するための別の優れた資料は<a href="https://javascript.info/">javascript.info</a>です.
+
+<a href="https://egghead.io/">egghead.io</a>は, JavaScript, React, その他の興味深いトピックについて,
+質の高いスクリーンキャストを多数用意していまが, 残念ながら, 一部のコンテンツは有料です.
