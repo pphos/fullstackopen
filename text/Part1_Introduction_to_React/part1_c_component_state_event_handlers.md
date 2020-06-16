@@ -170,4 +170,79 @@ const Hello = ({ name, age }) => {
 ```
 
 ## ページの再レンダリング
+これまでのところ, すべてのアプリケーションは, 最初のレンダリング後も見た目が変わらないようになっています.
+時間またはボタンをクリックしたときに値が増加するカウンターを作成したい場合はどうでしょうか？
+
+以下のコードからはじめましょう.
+
+```js
+const App = (props) => {
+  const {counter} = props
+  return (
+    <div>{counter}</div>
+  )
+}
+
+let counter = 1
+
+ReactDOM.render(
+  <App counter={counter} />,
+  document.getElementById('root')
+)
+```
+
+`App`コンポーネントには, `counter` propsの値を介してカウンターの値が与えられます.
+このコンポーネントは, 値を画面にレンダリングします.
+`counter`の値が変わるとどうなるでしょうか?
+以下のようにカウンターの値を増加させたとしても,
+
+```js
+counter += 1;
+```
+
+コンポーネントは再レンダリングされません.
+以下のように, `ReactDOM.render`メソッドをもう一度呼び出すことで, コンポーネントを再レンダリングできます.
+
+```js
+const App = (props) => {
+  const { counter } = props
+  return (
+    <div>{counter}</div>
+  )
+}
+
+let counter = 1
+
+const refresh = () => {
+  ReactDOM.render(<App counter={counter} />,
+  document.getElementById('root'))
+}
+
+refresh()
+counter += 1
+refresh()
+counter += 1
+refresh()
+```
+
+再レンダリングコマンドは, コピーペーストされたコード量を削減するために, `refresh`関数内にラップされています.
+
+これで, コンポーネントは3回レンダリングされます.
+最初に1, 次に2, 最後に3が表示されます.
+ただし, 1と2は, 気づかないほど短い時間に表示されます.
+
+`setInterval`を用いて1病ごとに`counter`を再レンダリングおよびインクリメントすることで,
+もう少し面白い機能を実装することができます.
+
+```js
+setInterval(() => {
+  refresh()
+  counter += 1
+}, 1000)
+```
+
+`ReactDOM.render`メソッドを繰り返し呼び出すことは, コンポーネントを再レンダリングするための推奨される方法ではありません.
+次に, この機能を達成するためのより良い方法を紹介します.
+
+## Stateful component
 
