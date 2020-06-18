@@ -245,4 +245,127 @@ setInterval(() => {
 次に, この機能を達成するためのより良い方法を紹介します.
 
 ## Stateful component
+これまでのコンポーネントは, コンポーネントのライフサイクル中に変化する可能性がある状態を一切含んでいないという意味で
+シンプルなものでした.
 
+次に, Reactの`state hook`を使用して, アプリケーションの`App`コンポーネントに状態を追加しましょう.
+
+アプリケーションを次のように変更します.
+
+```js
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
+```
+
+行頭でアプリケーションは`useState`関数をインポートしています.
+
+```js
+import React, { useState } from 'react'
+```
+
+コンポーネントを定義する関数の本体は, 関数呼び出しで始まります.
+
+```js
+const [ counter, setCounter ] = useState(0)
+```
+
+関数呼び出しは, コンポーネントに状態を追加し, 値ゼロで初期化された状態をレンダリングします.
+この関数は, 2つのアイテムを含む関数を返します.
+以前紹介した分割代入構文を使用して, アイテムを変数`counter`と`setCounter`に代入します.
+
+変数`counter`には, 状態の初期値であるゼロが代入されます.
+変数`setConter`には, 状態を修正するためにしようされる関数が代入されます.
+
+アプリケーションは`setTimeout`関数を呼び出し, カウンタの状態をインクリメントする関数と
+1秒のタイムアウトの2つのパラメータを渡します.
+
+```js
+setTimeout(
+  () => setCounter(counter + 1),
+  1000
+)
+```
+
+最初のパラメータとして`setTimeout`関数に渡された関数は,
+`setTimeout`関数を呼び出してから1病後に呼び出されます.
+
+```js
+() => setCounter(counter + 1)
+```
+
+状態変更関数`setTimeout`が呼び出されると, Reactはコンポーネントを再レンダリングします.
+つまり, コンポーネント関数の関数本体が再実行します.
+
+```js
+(props) => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  return (
+    <div>{counter}</div>
+  )
+}
+```
+
+コンポーネント関数が2回目に実行されると, `useState`関数を呼び出し, 状態の新しい値である1を返します.
+関数本体を再度実行すると, `setTimeout`への新しい関数呼び出しも行われ,
+1秒のタイムアウトが実行され, `counter`の状態が再びインクリメントされます.
+変数`counter`の値は1であるため, 値を1だけインクリメントすることは, カウンタの値を2に設定する式と本質的に同じです.
+
+```js
+() => setCounter(2)
+```
+
+その間, `counter`の古い値"1"が画面に表示されます.
+
+`setCounter`が状態を更新するたびに, コンポーネントが再レンダリングされます.
+`state`の値は1秒後に再びレンダリングされ, アプリケーションが実行されている限り繰り返されます.
+
+コンポーネントが思うようにレンダリングされなかったり, 間違ったタイミングでレンダリングされたりした場合,
+コンポーネントの変数の値をコンソールにロギングすることで, アプリケーションをデバッグすることができます.
+コードに以下のように追記します.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
+  console.log('rendering...', counter)
+
+  return (
+    <div>{counter}</div>
+  )
+}
+```
+
+`render`関数への呼び出しを追跡することは簡単です.
+
+<img src="https://fullstackopen.com/static/eb93a613b875efbcb9e28207f96593f5/14be6/4e.png">
+
+## Event handling
