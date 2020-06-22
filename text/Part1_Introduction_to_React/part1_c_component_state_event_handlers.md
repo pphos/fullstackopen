@@ -59,7 +59,7 @@ const Hello = (props) => {
 Java言語では, 別の関数の内部で関数を定義することは複雑で面倒であるので, あまり一般的ではありません.
 しかし, JavaScriptでは, 関数内部で関数を定義することは一般的に使われている手法です.
 
-## 分割代入
+## Destuctureing
 先に進む前に, ES6の仕様に追加されたJavaScriptの小さいながらも便利な機能について見てみましょう.
 これにより, 代入時にオブジェクトや配列から値を分割できます.
 
@@ -452,3 +452,88 @@ const App = () => {
 ```
 
 これでアプリケーションが完成しました！！
+
+
+## Event handler is function
+`onClick`属性を宣言するボタンのイベントハンドラを定義します.
+
+```js
+<button onClick={() => setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+イベントハンドラをより簡単な形式で定義しようとするとどうなるでしょうか？
+
+```js
+<button onClick={setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+これでは, アプリケーションが完全に壊れてしまします.
+
+<img src="https://fullstackopen.com/static/0011b60326c4e1b1c31563fb252723f4/14be6/5b.png">
+
+どうなっているのでしょうか？
+イベントハンドラは関数か関数参照のどちらかであることになっていますが, このように記述すると
+
+```js
+<button onClick={setCounter(counter + 1)}>
+```
+
+イベントハンドラは実際には関数呼び出しです.
+多くの状況でこれは問題ありませんが, この特定の状況ではそうではありません.
+最初は, `counter`変数の値は0です.
+Reactがメソッドを初めてレンダリングするときに, 関数呼び出し`setCounter(0 + 1)`を実行し,
+コンポーネントの状態の値を1に変更します.
+これにより, コンポーネントが再レンダリングされ, reactは再び`setCounter`関数呼び出しを実行し,
+状態が変化して再レンダリングが行われます....
+
+以前と同じようにイベントハンドラを定義しましょう.
+
+```js
+<button onClick={() => setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+これで, ボタンがクリックされたときに何が起こるかを定義するボタンの属性`onClick`の値は `() => setCounter(counter + 1)`になります.
+`setCounter`関数は, ユーザがボタンをクリックしたときにのみ呼び出されます.
+
+通常, JSXテンプレート内でイベントハンドラを定義することはお勧めできません.
+ここでは, イベントハンドラはとても単純なので問題ありません.
+
+とにかく, イベントハンドラ関数を個別の関数に分離しましょう.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+      <button onClick={setToZero}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+ここでは, イベントハンドラ関数が正しく定義されています.
+`onClick`属性の値は, 関数参照を含む変数です.
+
+```js
+<button onClick={increaseByOne}>
+  plus
+</button>
+```
+
