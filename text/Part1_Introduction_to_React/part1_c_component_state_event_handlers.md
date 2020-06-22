@@ -369,3 +369,86 @@ const App = () => {
 <img src="https://fullstackopen.com/static/eb93a613b875efbcb9e28207f96593f5/14be6/4e.png">
 
 ## Event handling
+特定のイベントが発生したときに呼び出されるように登録されているイベントハンドラについては,
+Part0 ですでに数回述べています.
+例えば, ユーザがWebページの様々な要素を操作することで, 様々な異なる種類のイベントのコレクションがトリガーされます.
+
+アプリケーションに変更を加えて, ユーザが`button`要素で実装されているボタンをクリックしたときに`counter`が増加するようにしましょう.
+
+ボタン要素はいわゆるマウスイベントをサポートしていますが, その中でもクリックが最も一般的なイベントです.
+
+Reactでは, クリックイベントへのイベントハンドラ関数の登録は次のようになります.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const handleClick = () => {
+    console.log('clicked')
+  }
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={handleClick}>
+        plus
+      </button>
+    </div>
+  )
+}
+```
+
+ボタンの`onClick`属性の値を, コードで定義されている`handleClick`関数への参照に設定します.
+
+これで, `plus`ボタンがクリックされるたびに, `handleClick`関数が呼び出されます.
+つまり, すべてのクリックイベントは, `clicked`というメッセージをブラウザコンソールに出力します.
+
+イベントハンドラ関数は, `onClick`属性の値への代入で直接定義することもできます.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={() => console.log('clicked')}>
+        plus
+      </button>
+    </div>
+  )
+}
+```
+
+イベントハンドラを次の形式に変更しましょう.
+
+```js
+<button onClick={() => setCounter(counter + 1)}>
+  plus
+</button>
+```
+
+目的の動作を実装します.
+つまり, `counter`の値が1つ増加するたびにコンポーネントが再レンダリングされるようにします.
+
+カウンターをリセットするためのボタンも追加しましょう.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  return (
+    <div>
+      <div>{counter}</div>
+      <button onClick={() => setCounter(counter + 1)}>
+        plus
+      </button>
+      <button onClick={() => setCounter(0)}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+これでアプリケーションが完成しました！！
