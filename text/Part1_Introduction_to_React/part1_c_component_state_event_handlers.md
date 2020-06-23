@@ -537,3 +537,73 @@ const App = () => {
 </button>
 ```
 
+## Passing state to child components
+小さく, アプリケーション全体, さらにはプロジェクト全体で再利用可能なReactコンポーネントを作成することをおすすめします.
+アプリケーションをリファクタリングして, カウンタを表示する1つのコンポーネントと2つのボタンコンポーネントの
+3つの小さなコンポーネントで構成しましょう.
+
+まず, カウンターの値を表示する`Display`コンポーネントを実装しましょう.
+
+Reactのベストプラクティスの1つは, コンポーネント階層の中で状態を上位階層に引き上げることです.
+ドキュメントではこう述べられています.
+
+  多くの場合, 複数のコンポーネントが同じ変化するデータを反映する必要があります.
+  共通の状態を最も近い共通の親まで引き上げておくことをお勧めします.
+
+それでは, アプリケーションの状態を`App`コンポーネントに配置し, `props`を介して`Display`コンポーネントに渡しましょう.
+
+```js
+const Display = (props) => {
+  return (
+    <div>{props.counter}</div>
+  )
+}
+```
+
+カウンターの状態をコンポーネントに渡すだけでよいので, コンポーネントの使用は簡単です.
+
+```js
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  const increaseByOne = () => setCounter(counter + 1)
+  const setToZero = () => setCounter(0)
+
+  return (
+    <div>
+      <Display counter={counter}/>
+      <button onClick={increaseByOne}>
+        plus
+      </button>
+      <button onClick={setToZero}>
+        zero
+      </button>
+    </div>
+  )
+}
+```
+
+すべてはまだ動作しています.
+ボタンがクリックされて`App`コンポーネントが再レンダリングされると, `Display`コンポーネントを含む全ての子コンポーネントも
+再レンダリングされます.
+
+次に, アプリケーションのボタンの部分である`Button`コンポーネントを作成しましょう.
+イベントハンドラとボタンのタイトルをコンポーネントの`props`として渡さなければなりません.
+
+```js
+const Button = (props) => {
+  return (
+    <button onClick={props.handleClick}>
+      {props.text}
+    </button>
+  )
+}
+```
+
+`App`コンポーネントは次のようになります.
+
+簡単に再利用できる`Button`コンポーネントができたので, カウンターをデクリメントするために使用できるボタンを追加することで,
+アプリケーションに新しい機能を実装しました.
+
+イベントハンドラは`handleClick`プロップを通して`Button`コンポーネントに渡されます.
+`prop`の名前自体はそれほど重要ではありませんが, 名前の選択は完全にランダムというわけではありませんでした.
