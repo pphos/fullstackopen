@@ -176,3 +176,90 @@ const handleLeftClick = () => {
 <a href="https://reactjs.org/docs/hooks-faq.html#should-i-use-one-or-many-state-variables">Reactの公式ドキュメント</a>には, このトピックに役立つガイダンスが含まれています.
 
 
+## Handling arrays
+アプリケーションで発生したすべてのクリックを記録する`allClicks`配列を含む状態のピースをアプリケーションに追加してみましょう.
+
+```js
+const App = (props) => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([])
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
+
+  return (
+    <div>
+      <div>
+        {left}
+        <button onClick={handleLeftClick}>left</button>
+        <button onClick={handleRightClick}>right</button>
+        {right}
+        <p>{allClicks.join(' ')}</p>
+      </div>
+    </div>
+  )
+}
+```
+
+すべてのクリックは, 空の配列として初期化される`allClicks`と呼ばれる個別の状態に保存されています.
+
+```js
+const [allClicks, setAll] = useState([])
+```
+
+`left`ボタンをクリックすると, 文字Lが`allClicks`配列に追加されます.
+
+```js
+const handleLeftClick = () => {
+  setAll(allClicks.concat('L'))
+  setLeft(left + 1)
+}
+```
+
+`allClicks`に格納された状態のピースは, 以前の状態の配列の全てのアイテムと文字Lを含む配列に設定されます.
+新しいアイテムを配列に追加するには, 既存の配列を変更せずに, アイテムが追加された配列の新しいコピーを返す`concat`メソッドを使用します.
+
+前述のように, JavaScriptでは`push`メソッドを使用して配列にアイテムを追加することもできます.
+アイテムを`allClicks`配列にプッシュして追加し, 状態を更新しても, アプリケーションは機能しているように見えます.
+
+```js
+const handleLeftClick = () => {
+  allClicks.push('L')
+  setAll(allClicks)
+  setLeft(left + 1)
+}
+```
+
+ただし, これはすべきことではありません.
+前述したように, `allClicks`のようなReactコンポーネントのステートを直接変更してはいけません.
+状態の変更がうまくいっているように見える場合もありますが, デバッグが非常に困難な問題を引き起こす可能性があります.
+
+クリック履歴がページにどのようにレンダリングされるかを詳しく見てみましょう.
+
+```js
+const App = (props) => {
+  // ...
+
+  return (
+    <div>
+      <div>
+        {left}
+        <button onClick={handleLeftClick}>left</button>
+        <button onClick={handleRightClick}>right</button>
+        {right}
+        <p>{allClicks.join(' ')}</p>
+      </div>
+    </div>
+  )
+}
+```
+
+`allClicks`配列に対して`join`メソッドを呼び出し, すべてのアイテムを空白で区切られた単一の文字列に結合することでレンダリングしています.
