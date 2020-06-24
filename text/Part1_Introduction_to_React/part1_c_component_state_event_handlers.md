@@ -629,3 +629,54 @@ Reactの公式チュートリアルでは, この規約を提案しています.
 `Display`は, `counter`の新しい値である1を`props`として受け取ります.
 `Button`コンポーネントは, `counter`の状態を変更するために使用できるイベントハンドラを受け取ります.
 
+
+## Refactoring the components
+`counter`の値を表示するコンポーネントは次の通りです.
+
+```js
+const Display = (props) => {
+  return (
+    <div>{props.counter}</div>
+  )
+}
+```
+
+コンポーネントは, その`props`の`counter`フィールドのみを使用します.
+つまり, 以下のように分割代入を用いることで, コンポーネントを単純化することができます.
+
+```js
+const Display = ({ counter }) => {
+  return (
+    <div>{counter}</div>
+  )
+}
+```
+
+コンポーネントを定義するメソッドには`return`文のみが含まれるため,
+よりコンパクトな形式であるアロー関数を用いてメソッドを定義できます.
+
+```js
+const Display = ({ counter }) => <div>{counter}</div>
+```
+
+`Button`コンポーネントも同様に簡単化できます.
+
+```js
+const Button = (props) => {
+  return (
+    <button onClick={props.handleClick}>
+      {props.text}
+    </button>
+  )
+}
+```
+
+デストラクチャリングを使用して, `props`から必要なフィールドのみを取得し, よりコンパクトな形式のアロー関数を使用できます.
+
+```js
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+```
