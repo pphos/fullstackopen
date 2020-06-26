@@ -263,3 +263,124 @@ const App = (props) => {
 ```
 
 `allClicks`配列に対して`join`メソッドを呼び出し, すべてのアイテムを空白で区切られた単一の文字列に結合することでレンダリングしています.
+
+
+## Conditional rendering
+クリック履歴のレンダリングが新しい`History`コンポーネントによって処理されるようにアプリケーションを変更してみましょう.
+
+```js
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
+
+const App = (props) => {
+  // ...
+
+  return (
+    <div>
+      <div>
+        {left}
+        <button onClick={handleLeftClick}>left</button>
+        <button onClick={handleRightClick}>right</button>
+        {right}
+        <History allClicks={allClicks} />
+      </div>
+    </div>
+  )
+}
+```
+
+コンポーネントの動作は, ボタンがクリックされたかどうかによって異なります.
+ボタンが一回も押されていない場合, つまり配列`allClicks`が空である場合,
+コンポーネントは代わりに案内を含む`div`要素をレンダリングします.
+
+```js
+<div>the app is used by pressing the buttons</div>
+```
+
+ボタンが一度でも押された場合には, コンポーネントがクリック履歴をレンダリングします.
+
+```js
+<div>
+  button press history: {props.allClicks.join(' ')}
+</div>
+```
+
+`History`コンポーネントは, アプリケーションの状態に応じて, 全く異なるReact要素をレンダリングし, これをconditional rendering (条件付きレンダリング)と呼びます.
+
+Reactは, この他にも多くの条件付きレンダリングを行う方法を提供しています.
+これについてはPart2で詳しくみていきます.
+
+以前に定義した`Button`コンポーネントを使用するようにリファクタリングして,
+アプリケーションに最後の変更を加えてみましょう.
+
+```js
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
+
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
+
+const App = (props) => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([])
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
+
+  return (
+    <div>
+      <div>
+        {left}
+        <Button onClick={handleLeftClick} text='left' />
+        <Button onClick={handleRightClick} text='right' />
+        {right}
+        <History allClicks={allClicks} />
+      </div>
+    </div>
+  )
+}
+```
+
+
+## Old React
+このコースでは, state hookをstateをReactコンポーネントに追加します.
+これは, Reactの新しいバージョンの一部であり, バージョン16.8.0以降で使用できます.
+hookが追加される前は, functionalコンポーネントにstateを追加する方法はありませんでした.
+stateを必要とするコンポーネントは, JavaScriptのクラス構文を使用して, クラスコンポーネントとして定義する必要がありました.
