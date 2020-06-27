@@ -513,3 +513,37 @@ const [allClicks, setAll] = useState([])
 
 
 ## Rules of Hooks
+アプリケーションがhooksベースの状態関数を正しく使用するためには, いくつかの制限とルールに従う必要がある.
+
+`useState`関数 (およびコース後半で使用する`useEffect`関数) は, ループ, 条件式, またはコンポーネントを定義する関数ではない場所から呼び出されてはいけません.
+hooksは常に同じ順番で呼び出される必要があり, もしそうでない場合には, アプリケーションの動作がおかしくなります.
+
+要約すると, hooksは, Reactコンポーネントを定義する関数本体の内部からのみ呼び出すことができます.
+
+```js
+const App = (props) => {
+  // these are ok
+  const [age, setAge] = useState(0)
+  const [name, setName] = useState('Juha Tauriainen')
+
+  if ( age > 10 ) {
+    // this does not work!
+    const [foobar, setFoobar] = useState(null)
+  }
+
+  for ( let i = 0; i < age; i++ ) {
+    // also this is not good
+    const [rightWay, setRightWay] = useState(false)
+  }
+
+  const notGood = () => {
+    // and this is also illegal
+    const [x, setX] = useState(-1000)
+  }
+
+  return (
+    //...
+  )
+}
+```
+
