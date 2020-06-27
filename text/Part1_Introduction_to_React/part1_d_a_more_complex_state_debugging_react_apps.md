@@ -393,3 +393,123 @@ functionalコンポーネントはReactの未来であるとはいえ, いつか
 コースの後半で, Reactのクラスコンポーネントについて詳しく学習します.
 
 
+## Debuggin React applications
+典型的な開発者の作業時間の大部分は, デバッグと既存のコードの読み書きに費やされます.
+たまに新しいコードを書くこともありますが, 作業時間の大部分は, 何かが壊れている理由や, 何かがどのように動作するかを理解することに費やされます.
+この理由から, デバッグのためのグッドプラクティスとツールは非常に重要です.
+
+幸運なことに, デバッグに関しては, Reactは開発者にとって非常に使いやすいライブラリです.
+
+次に進む前に, Web開発の最も重要なルールの一つを思い出してみましょう.
+
+Web開発の最初のルール:
+
+ブラウザのデベロッパーコンソールを常に開いたままにしておくこと.
+
+特にConsoleタブは, 別のタブを表示する特別な理由がない限り, 常に開いている必要があります.
+
+コードとWebページの両方を同時に開いたままにしておきます.
+
+コードのコンパイルに失敗し, ブラウザがクリスマスツリーのように点灯する場合,
+
+<img src="https://fullstackopen.com/static/ce4afeacf36ad991bc0eb0b095ea96b5/14be6/6e.png">
+
+更にコードを書き足すのではなく, すぐに問題を見つけて修正してください.
+コーディングの歴史の中で, コンパイルに失敗したコードが,
+大量の追加コードを書いた後に奇跡的に動作するようになった瞬間はまだありません.
+このコースでも, そのような出来事が起こるとは到底思えません.
+
+昔ながらの, printベースのデバッグは常に良い考え方です.
+
+```js
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
+```
+
+上記のコンポーネントが意図した通りに動作していない場合は, その変数をコンソールに出力し始めると便利です.
+これを効果的に行うには, 関数をよりコンパクトな形式に変換し, `props`オブジェクト全体を即座に破壊することなく受け取る必要があります.
+
+```js
+const Button = (props) => {
+  console.log(props)
+  const { onClick, text } = props
+  return (
+    <button onClick={onClick}>
+      {text}
+    </button>
+  )
+}
+```
+
+これにより, 例えば, コンポーネントの使用時に属性の1つにスペルミスがあったかどうかがすぐに分かります.
+
+注: `console.log`をデバッグに使用する場合, 以下のように`+`演算子を使用してJavaのような方法でオブジェクトを結合しないでください.
+
+```js
+console.log('props value is ' + props)
+```
+
+代わりに, コンソールにログを記録したいものは次のようにカンマ(,)で区切ってください.
+
+```js
+console.log('props value is', props)
+```
+
+文字列とオブジェクトを連結するようなJavaのような方法を使用すると, 以下のように情報がないログメッセージが表示されます.
+
+```js
+props value is [Object object]
+```
+
+一方, カンマで区切られたアイテムはすべて, ブラウザコンソールで詳細に確認できます.
+
+コンソールへのロギングは, アプリケーションをデバッグする唯一の方法ではありません.
+コードの任意の場所に`debugger`コマンドを記述することにより,
+Chromeデベロッパーコンソールのデバッガーでアプリケーションコードの実行を一時停止できます.
+
+`debugger`コマンドが実行されるポイントに到達すると, アプリケーションの実行が一時停止されます.
+
+<img src="https://fullstackopen.com/static/4a4bced189180676ff4019f459be833e/14be6/7a.png">
+
+`Console`タブに移動すると, 変数の現在の状況を簡単に確認できます.
+
+<img src="https://fullstackopen.com/static/5ba1388f4d17134dcfc62fbeb2251421/14be6/8a.png">
+
+バグの原因が発見されたら, `debugger`コマンドを削除してページを更新できます.
+
+デバッガーを使用すると, `Source`タブの右側にあるコントロールを使用して, コードを1行ずつ実行することもできます.
+
+`Source`タブでブレークポイントを追加することにより, `debugger`コマンドを使用せずにデバッガーにアクセスすることもできます.
+コンポーネントの変数の値の検査は, `Score`セクションで実行できます.
+
+<img src="https://fullstackopen.com/static/c8c143bb940ecd99aea4dc4a1c0239f2/14be6/9a.png">
+
+ChromeにReact開発者ツール拡張機能を追加することを強くお勧めします.
+拡張機能を追加すると, 新しいReactタブが開発者ツールに追加されます.
+
+<img src="https://fullstackopen.com/static/684b9b920cdd53d20129a4572ef9e209/14be6/10e.png">
+
+新しいReact開発者ツールのタブを使用して, アプリケーションのさまざまなReact要素を, そのstateとpropsとともに検査できます.
+
+残念ながら, React開発者ツールの現在のバージョンでは, hooksを用いて作成された
+コンポーネントのstateを表示する際に不満な点が残っています.
+
+<img src="https://fullstackopen.com/static/d106df75c6705400c7e0e8ac944f49c9/14be6/11e.png">
+
+コンポーネントのstateは次のように定義されていました.
+
+```js
+const [left, setLeft] = useState(0)
+const [right, setRight] = useState(0)
+const [allClicks, setAll] = useState([])
+```
+
+開発者ツールは, 定義された順番でhooksのstateを表示します.
+
+<img src="https://fullstackopen.com/static/d3e57c37a658ee67feec1e8368505e4b/14be6/11be.png">
+
+
+## Rules of Hooks
