@@ -948,3 +948,19 @@ const App = (props) => {
 
 
 ## Passing Event Handlers to Child Components
+ボタンを独自のコンポーネントに抽出してみましょう.
+
+```js
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+```
+
+コンポーネントは, `handleClick`のpropsからイベントハンドラ関数を取得し, ボタンのテキストを`text` propsから取得します.
+
+`Button`コンポーネントの使用は簡単ですが, propsをコンポーネントに渡すときに正しい属性名を使用する必要があります.
+
+<img src="https://fullstackopen.com/static/8ba6f921659bba13c9312f470007828e/14be6/12e.png">
+
