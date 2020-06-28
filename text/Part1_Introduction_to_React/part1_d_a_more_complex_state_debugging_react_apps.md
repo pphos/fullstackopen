@@ -1064,4 +1064,220 @@ const App = props => {
 たいていの場合, それぞれのプロジェクトを別々のリポジトリにしたくないので,
 アプリケーションのルートで`rm -rf .git`コマンドを実行して.gitフォルダを削除しましょう.
 
-ｋ
+状況によっては, プロジェクトのルートから以下のコマンドを実行する必要がある場合もあります.
+
+```js
+rm -rf node_modules/ && npm i
+```
+
+### 1.6: unicafe step1
+多くの企業と同様に, Unicafeは顧客からフィードバックを収集します.
+あなたのタスクは, 顧客のフィードバックを収集するためのWebアプリケーションを実装することです.
+フィードバックには, good, neutral, badの3つのオプションしかありません.
+
+アプリケーションは, カテゴリ毎に収集されたフィードバックの総数を表示する必要があります.
+最終的なアプリケーションは次のようになります.
+
+<img src="https://fullstackopen.com/static/d4fe767d6d8eb46f1dd21334f5f9e46e/14be6/13e.png">
+
+アプリケーションは, 単一のブラウザセッション中にのみ動作する必要があることに注意してください.
+ページを更新すると, 収集されたフィードバックは表示されなくなります.
+
+アプリケーションは, 単一の`index.js`ファイルに実装できます.
+以下のコードをアプリケーションの出発点として使用できます.
+
+```js
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+
+const App = () => {
+  // save clicks of each button to own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  return (
+    <div>
+      code here
+    </div>
+  )
+}
+
+ReactDOM.render(<App />,
+  document.getElementById('root')
+)
+```
+
+### 1.7: unicafe step2
+アプリケーションを拡張して, 収集されたフィードバックに関するより多くの統計を表示しましょう.
+収集されたフィードバックの合計数, 平均スコア (good: 1, neutral: 0, bad: -1), およびポジティブフィードバックの割合です.
+
+<img src="https://fullstackopen.com/static/0a5d15ae9f055a15cb469b9c9223df41/14be6/14e.png">
+
+### 1.8: unicafe step3
+統計の表示が独立した`Statistics`コンポーネントに抽出されるように, アプリケーションをリファクタリングしましょう.
+アプリケーションのstateは, `App`のルートコンポーネントに残る必要があります.
+
+コンポーネントは他のコンポーネントの内部で定義してはならないことに注意してください.
+
+```js
+// a proper place to define a component
+const Statistics = (props) => {
+  // ...
+}
+
+const App = () => {
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  // do not define a component within another component
+  const Statistics = (props) => {
+    // ...
+  }
+
+  return (
+    // ...
+  )
+}
+```
+
+### 1.9: unicafe step4
+フィードバックが収集された後にのみ統計を表示するようにアプリケーションを変更しましょう.
+
+<img src="https://fullstackopen.com/static/b453d7533ae85dcaf3eccf342a353c58/14be6/15e.png">
+
+### 1.10: unicafe step5
+アプリケーションのリファクタリングを続けましょう.
+次の2うのコンポーネントを抽出しましょう.
+
+- フィードバックの送信に使用されるボタンを定義するための`Button`コンポーネント
+- 平均スコアのような単一の統計を表示するための`Statistic`コンポーネント
+
+明白にしておきましょう: `Statistic`コンポーネントは常に1つ統計量を表示し,
+アプリケーションはすべての統計量を表示するために複数のコンポーネントを使用します.
+
+```js
+const Statistics = (props) => {
+  /// ...
+  return(
+    <div>
+      <Statistic text="good" value ={...} />
+      <Statistic text="neutral" value ={...} />
+      <Statistic text="bad" value ={...} />
+      // ...
+    </div>
+  )
+}
+```
+
+アプリケーションのstateは引き続き, ルートである`App`コンポーネントに保持する必要があります.
+
+
+### 1.11*: unicafe step6
+統計をHTMLの`table`を用いて表示すると, アプリケーションはだいたい次のようになります.
+
+<img src="https://fullstackopen.com/static/a74acccc17aafb02b3801ffa1fcc0fdc/14be6/16e.png">
+
+常にコンソールを開いたままにしておいてください.
+コンソールに次のような警告が表示された場合,
+
+<img src="https://fullstackopen.com/static/d6f948307449c2673f28f1077ef4d789/14be6/17a.png">
+
+次に, 警告を消すために必要なアクションを実行しましょう.
+行き詰まった場合は, エラーメッセージをグーグルで検索しましょう.
+
+典型的なエラーの発生源: `Unchecked runtime.lastError: Could not establish connection. Receiving end does not exist.`はChrome拡張です.
+`chrome://extensions/`に移動して, 1つずつ無効化してReactアプリケーションのページを更新してみてください.
+エラーは最終的には消えます.
+
+今度, コンソール警告が表示されないことを確認してください.
+
+### 1.12*: anecdotes step1
+ソフトウェア工学の世界は, 時代を超えた真実を私達の分野から短いワンライナーに蒸留する<a href="http://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm">逸話</a>で満ちています.
+
+ソフトウェア工学の分野からランダムに逸話を表示するボタンをクリックすることで, 以下のアプリケーションを拡張しましょう.
+
+```js
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+
+const App = (props) => {
+  const [selected, setSelected] = useState(0)
+
+  return (
+    <div>
+      {props.anecdotes[selected]}
+    </div>
+  )
+}
+
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
+
+ReactDOM.render(
+  <App anecdotes={anecdotes} />,
+  document.getElementById('root')
+)
+```
+
+GoogleがJavaScriptで乱数を生成する方法を教えてくれます.
+ブラウザのコンソールで乱数の生成をテストすることができることを覚えておいてください.
+
+完成したアプリケーションは次のようになります.
+
+<img src="https://fullstackopen.com/static/8577fa00fc4d946e2322de9b2707c89c/14be6/18a.png">
+
+警告: `create-react-app`は, 既存のgitリポジトリの中でアプリケーションを作成しない限り,
+プロジェクトを自動的にgitリポジトリに変えてしまします.
+たいていの場合, それぞれのプロジェクトを別々のリポジトリにしたくないので,
+アプリケーションのルートで`rm -rf .git`コマンドを実行して.gitフォルダを削除しましょう.
+
+
+### 1.13*: anecdotes step2
+アプリケーションを拡張して, 表示された逸話に投票できるようにしましょう.
+
+<img src="https://fullstackopen.com/static/06f95cb43a18bd6429174200a8d17cff/14be6/19a.png">
+
+注意: 各逸話への投票を, コンポーネントのstateの配列またはオブジェクトに格納します.
+オブジェクトや配列のような複雑なデータ構造に格納されたstateを更新する正しい方法は,
+stateのコピーを作成することであることを覚えておいてください.
+
+次のようにオブジェクトのコピーを作成できます.
+
+```js
+const points = { 0: 1, 1: 3, 2: 4, 3: 2 }
+
+const copy = { ...points }
+// increment the property 2 value by one
+copy[2] += 1
+```
+
+または次のようにできます.
+
+```js
+const points = [1, 4, 6, 3]
+
+const copy = [...points]
+// increment the value in position 2 by one
+copy[2] += 1
+```
+
+この場合, 配列を使う方が簡単な選択かもしれません.
+ググッてみると, <a href="https://stackoverflow.com/questions/20222501/how-to-create-a-zero-filled-javascript-array-of-arbitrary-length/22209781">このように</a>任意の長さの初期値0の配列を作るヒントがたくさんでききます.
+
+## 1.14*: anecdotes step3
+次に, 投票数が最大の逸話を表示するアプリケーションの最終バージョンを実装しましょう.
+
+<img src="https://fullstackopen.com/static/3e8638efbbbbcabac7bb79466ab3a5f6/14be6/20a.png">
+
+最初に複数の逸話が関連付けられている場合は, そのうちの1つを表示するだけで十分です.
+
+これがこのパートの最後の演習でした.
+今度はコードをGitHubにプッシュし, 終了したすべての演習を<a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">提出システム</a>にマークしましょう.
