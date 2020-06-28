@@ -696,3 +696,255 @@ const App = (props) => {
   )
 }
 ```
+
+## Function that returns a function
+イベントハンドラを定義するもう一つの方法は, 関数を返す関数を使用することです.
+
+このコースの演習では, 関数を返す関数を使用する必要はおそらくないでしょう.
+特にこのトピックが混乱するように感じるのであれば, とりあえずこの項目を飛ばして, 後でまた戻ってきても問題ありません.
+
+コードに次の変更を加えましょう.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const hello = () => {
+    const handler = () => console.log('hello world')
+    return handler
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={hello()}>button</button>
+    </div>
+  )
+}
+```
+
+以前に, イベントハンドラは関数呼び出しではなく, 関数または関数への参照である必要があると述べました.
+この場合, なぜ関数呼び出しが機能するのでしょうか？
+
+コンポーネントがレンダリングされると, 次の関数が実行されます.
+
+```js
+const hello = () => {
+  const handler = () => console.log('hello world')
+
+  return handler
+}
+```
+
+関数の返り値は, `handler`変数に割り当てられた別の関数です.
+
+Reactが次のコードをレンダリングするとき
+
+```js
+<button onClick={hello()}>button</button>
+```
+
+`hello()`の戻り値を`onClick`属性に割り当てます.
+基本的に, 呼び出しは次のように変換されます.
+
+```js
+<button onClick={() => console.log('hello world')}>
+  button
+</button>
+```
+
+`hello`関数は関数を返すため, イベントハンドラは関数になりました.
+
+このコンセプトのポイントは何でしょうか？
+
+コードに少し変更を加えてみましょう.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const hello = (who) => {
+    const handler = () => {
+      console.log('hello', who)
+    }
+    return handler
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={hello('world')}>button</button>
+      <button onClick={hello('react')}>button</button>
+      <button onClick={hello('function')}>button</button>
+    </div>
+  )
+}
+```
+
+これで, アプリケーションにはパラメータを受け取る`hello`関数によって定義されたイベントハンドラを持つ3つのボタンがあります.
+
+最初のボタンは次のように定義されています.
+
+```js
+<button onClick={hello('world')}>button</button>
+```
+
+イベントハンドラは, 関数呼び出し`hello('world')`を実行して作成されます.
+関数呼び出しは関数を返します.
+
+```js
+() => {
+  console.log('hello', 'world')
+}
+```
+
+2番目のボタンは次のように定義されています.
+
+```js
+<button onClick={hello('react')}>button</button>
+```
+
+イベントハンドラを作成する関数呼び出し`hello('react')`は以下を返します.
+
+```js
+() => {
+  console.log('hello', 'react')
+}
+```
+
+どちらのボタンも独自の個別のイベントハンドラを取得します.
+
+関数を返す関数は, パラメータでカスタマイズできる汎用機能の定義に利用できます.
+イベントハンドラを作成する`hello`関数は, ユーザに挨拶するためにカスタマイズされた,
+イベントハンドラを作成するファクトリーと考えることができます.
+
+現在のコードの定義は少し冗長です.
+
+```js
+const hello = (who) => {
+  const handler = () => {
+    console.log('hello', who)
+  }
+
+  return handler
+}
+```
+
+ヘルパー変数を削除して, 作成された関数を直接返しましょう.
+
+```js
+const hello = (who) => {
+  return () => {
+    console.log('hello', who)
+  }
+}
+```
+
+`hello`関数は単一の`return`文で構成されているので, 中括弧を省略して, アロー関数のよりコンパクトな構文を使用できます.
+
+```js
+const hello = (who) =>
+  () => {
+    console.log('hello', who)
+  }
+```
+
+最後に, すべての矢印を同じ行に書きましょう.
+
+```js
+const hello = (who) => () => {
+  console.log('hello', who)
+}
+```
+
+同じトリックを使用して, コンポーネントの状態を特定の値に設定するイベントハンドラを定義できます.
+コードに次の変更を加えましょう.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => () => {
+    setValue(newValue)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={setToValue(1000)}>thousand</button>
+      <button onClick={setToValue(0)}>reset</button>
+      <button onClick={setToValue(value + 1)}>increment</button>
+    </div>
+  )
+}
+```
+
+コンポーネントがレンダリングされるとthousandボタンが生成されます.
+
+```js
+<button onClick={setToValue(1000)}>thousand</button>
+```
+
+イベントハンドラには, 以下の関数である`setToValue(100)`の戻り値が設定されています.
+
+```js
+() => {
+  setValue(1000)
+}
+```
+
+increaseボタンは次のように宣言されています.
+
+```js
+<button onClick={setToValue(value + 1)}>increment</button>
+```
+
+イベントハンドラは, パラメータとして変数`value`お現在の値を1だけ増加させたパラメータを受け取る,
+`setToValue(value + 1)`という関数呼び出しによって作成されます.
+もし`value`の値が10であれば, 作成されたイベントハンドラは次の関数になります.
+
+```js
+() => {
+  setValue(11)
+}
+```
+
+この機能を実現するために, 関数を返す関数を使用する必要はありません.
+stateの更新を担う`setToValue`関数を通常の関数として表しましょう.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => {
+    setValue(newValue)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={() => setToValue(1000)}>
+        thousand
+      </button>
+      <button onClick={() => setToValue(0)}>
+        reset
+      </button>
+      <button onClick={() => setToValue(value + 1)}>
+        increment
+      </button>
+    </div>
+  )
+}
+```
+
+これで, イベントハンドラを, 適切なパラメータを使用して`setToValue`関数を呼び出す関数として定義できます.
+アプリケーションの状態をリセットするためのイベントハンドラは次のようになります.
+
+```js
+<button onClick={() => setToValue(0)}>reset</button>
+```
+
+どちらのイベントハンドラの定義方法を選択するかは, ほとんどその人の好みの問題です.
+
+
+## Passing Event Handlers to Child Components
