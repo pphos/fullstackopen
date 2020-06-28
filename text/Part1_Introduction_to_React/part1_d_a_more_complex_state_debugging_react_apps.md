@@ -547,3 +547,152 @@ const App = (props) => {
 }
 ```
 
+
+## Event Handling Revisited
+イベント処理は, このコースの以前の反復では難しいテーマであることが分かっています.
+
+このため, イベント処理のトピックを再度取り上げます.
+
+以下の単純なアプリケーションを開発しているとしましょう.
+
+ボタンをクリックして, 変数`value`に格納されている状態をリセットしましょう.
+
+ボタンがクリックイベントに反応するようにするためには, ボタンにイベントハンドラを追加する必要があります.
+
+イベントハンドラは常に関数または関数への参照である必要があります.
+イベントハンドラがそれ以外のタイプの変数に格納されている場合, ボタンは機能しません.
+
+イベントハンドラを以下のように文字列として定義した場合,
+
+```js
+<button onClick={'crap...'}>button</button>
+```
+
+Reactはコンソールで次のように警告を出します.
+
+```js
+index.js:2178 Warning: Expected `onClick` listener to be a function, instead got a value of `string` type.
+    in button (at index.js:20)
+    in div (at index.js:18)
+    in App (at index.js:27)
+```
+
+また, 次のように記述したとしてもボタンは機能しません.
+
+```js
+<button onClick={value + 1}>button</button>
+```
+
+イベントハンドラに`value + 1`を設定しようとしましたが, これは単に操作の結果を返却するだけです.
+Reactはこれについても親切に警告してくれます.
+
+```js
+index.js:2178 Warning: Expected `onClick` listener to be a function, instead got a value of `number` type.
+```
+
+更に, こういった記述をしてもボタンは機能しません.
+
+```js
+<button onClick={value = 0}>button</button>
+```
+
+このイベントハンドラは関数ではなく変数への代入であるため, Reactは再びコンソールに警告を表示します.
+Reactで直接`state`を変更してはならないという意味でも, この書き方には問題があります.
+
+以下についてはどうでしょうか？
+
+```js
+<button onClick={console.log('clicked the button')}>
+  button
+</button>
+```
+
+メッセージは一度コンソールに出力されますが, もう一度ボタンをクリックしても何も起こりません.
+イベントハンドラに`console.log`関数が含まれている場合でも, これが機能しないのはなぜでしょうか？
+
+ここでの問題は, イベントハンドラが関数呼び出しとして定義されていることです.
+つまり, イベントハンドラには, 関数からの返り値が実際に割り当てられますが, `console.log`の場合は`undefined`です.
+
+`console.log`関数呼び出しは, コンポーネントがレンダリングされるときに実行されるため, コンソールに一度は出力されます.
+
+次の試みにも誤りがあります.
+
+```js
+<button onClick={setValue(0)}>button</button>
+```
+
+もう一度, 関数呼び出しをイベントハンドラに設定してみました.
+これはうまく動作しません.
+この特定の試みは別の問題を引き起こします.
+コンポーネントがレンダリングされると関数`setValue(0)`が実行され,
+その結果, コンポーネントが再レンダリングされます.
+再レンダリングされると, 再び`setValue(0)`が呼び出され, 無限の再帰が発生します.
+
+ボタンがクリックされたときに特定の関数呼び出しを実行するためには, 次のようにします.
+
+```js
+<button onClick={() => console.log('clicked the button')}>
+  button
+</button>
+```
+
+これでイベントハンドラはアロー関数構文 `() => console.log('clicked the button')`で定義された関数となります.
+コンポーネントがレンダリングされると, 関数呼び出しでなく, アロー関数への参照のみがイベントハンドラに設定されます.
+関数呼び出しは, ボタンがクリックされたときにのみ発生します.
+
+これと同じ手法を使用して, アプリケーションに状態のリセットを実装できます.
+
+```js
+<button onClick={() => setValue(0)}>button</button>
+```
+
+これで, イベントハンドラは関数`() => setValue(0)`になります.
+
+ボタンの属性でイベントハンドラを直接定義することは, 必ずしも最良の考え方ではありません.
+
+イベントハンドラは別の場所で定義されていることが多いでしょう.
+次のバージョンのアプリケーションでは, コンポーネント関数の本体にある, `handleClick`変数に割り当てられる関数を定義します.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const handleClick = () =>
+    console.log('clicked the button')
+
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+```
+
+これで, `handleClick`変数が関数への参照に割り当てられました.
+参照は`onClick`属性としてボタンに渡されます.
+
+```js
+<button onClick={handleClick}>button</button>
+```
+
+当然, イベントハンドラ関数は複数の文で構成できます.
+これらのケースでは, アロー関数に中括弧を使用します.
+
+```js
+const App = (props) => {
+  const [value, setValue] = useState(10)
+
+  const handleClick = () => {
+    console.log('clicked the button')
+    setValue(0)
+  }
+
+  return (
+    <div>
+      {value}
+      <button onClick={handleClick}>button</button>
+    </div>
+  )
+}
+```
