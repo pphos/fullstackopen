@@ -1,68 +1,68 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1.1: course infromation, step 1
+この演習で取り組むアプリケーションは, 今後の演習でさらに利用されます.
+このコースおよびこれ以降のコースの演習では, 最終型のアプリケーションを提出するだけで十分です.
+必要に応じて, 演習ごとにコミットを作成することもできます.
 
-## Available Scripts
+`create-react-app`を使用して, 新しいアプリケーションを作成してください.
+そして, `index.js`を次のように変更してください.
 
-In the project directory, you can run:
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-### `yarn start`
+const App = () => {
+  const course = 'Half Stack application development'
+  const part1 = 'Fundamentals of React'
+  const exercises1 = 10
+  const part2 = 'Using props to pass data'
+  const exercises2 = 7
+  const part3 = 'State of a component'
+  const exercises3 = 14
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  return (
+    <div>
+      <h1>{course}</h1>
+      <p>
+        {part1} {exercises1}
+      </p>
+      <p>
+        {part2} {exercises2}
+      </p>
+      <p>
+        {part3} {exercises3}
+      </p>
+      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
+    </div>
+  )
+}
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
-### `yarn test`
+その後, 余分な`App.js`, `App.css`, `App.test.js`, `logo.svg`, `setupTests.js`, `serviceWorker.js`のファイルを削除してください.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+残念なことに, アプリケーション全体が同じコンポーネントの中にあります.
+`Header`, `Content`, `Total`の3つの新しいコードで構成されるようにコードをリファクタリングしてください.
+全てのデータはいまだ`App`コンポーネント内にあり, 必要なデータを`props`を用いて各コンポーネントに渡します.
+`Header`はコース名のレンダリングを担当し, `Content`はパートとその演習数をレンダリングし,
+`Total`は演習の総数をレンダリングします.
 
-### `yarn build`
+`App`コンポーネントの中身は, おおよそ次のようになります.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+const App = () => {
+  // const-definitions
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  return (
+    <div>
+      <Header course={course} />
+      <Content ... />
+      <Total ... />
+    </div>
+  )
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+<em>警告</em>: `create-react-app`は, 既存のリポジトリ内にアプリケーションが作成されない限り,
+プロジェクトを自動的にgitリポジトリにします.
+ほとんどの場合, プロジェクトをリポジトリにしたくないので, プロジェクトのルートで`rm -rf .git`コマンドを実行してください.
