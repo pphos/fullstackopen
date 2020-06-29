@@ -85,3 +85,32 @@ const Content = ... {
 
 現在の演習のアプリケーションは, 個々の変数に基づいているため, かなり原始的な方法で情報を渡しています.
 この状況は今後の演習で改善していきます.
+
+## 1.3: course information step3
+アプリケーションでオブジェクトを使用しましょう.
+`App`コンポーネントの変数定義を次のように変更し,
+アプリケーションが引き続き動作するようにリファクタリングします.
+
+```js
+const App = () => {
+  const course = 'Half Stack application development'
+  const part1 = {
+    name: 'Fundamentals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'State of a component',
+    exercises: 14
+  }
+
+  return (
+    <div>
+      ...
+    </div>
+  )
+}
+```
