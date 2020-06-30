@@ -10,14 +10,20 @@ const Button = ({ onClick, text }) => {
 }
 
 const Statistic = (props) => {
+
+  if (props.text === "positive") {
+    return (
+      <tr>
+        <th>{props.text}</th>
+        <td>{props.value} %</td>
+      </tr>
+    )
+  }
+
   return (
     <tr>
-      <th>
-        {props.text}
-      </th>
-      <td>
-        {props.value}
-      </td>
+      <th>{props.text}</th>
+      <td>{props.value}</td>
     </tr>
   )
 }
