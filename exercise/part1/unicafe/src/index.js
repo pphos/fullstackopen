@@ -10,6 +10,11 @@ const Button = ({ onClick, text }) => {
 }
 
 const Statistic = (props) => {
+
+  if (props.text === "positive") {
+    return <>{props.text} {props.value} % <br/> </>
+  }
+
   return (
     <>
       {props.text} {props.value} <br/>
