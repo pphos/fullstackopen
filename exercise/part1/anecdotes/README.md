@@ -1,68 +1,45 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 1.12*: anecdotes step1
+ソフトウェア工学の世界は, 時代を超えた真実を私達の分野から短いワンライナーに蒸留する<a href="http://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm">逸話</a>で満ちています.
 
-## Available Scripts
+ソフトウェア工学の分野からランダムに逸話を表示するボタンをクリックすることで, 以下のアプリケーションを拡張しましょう.
 
-In the project directory, you can run:
+```js
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 
-### `yarn start`
+const App = (props) => {
+  const [selected, setSelected] = useState(0)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  return (
+    <div>
+      {props.anecdotes[selected]}
+    </div>
+  )
+}
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
 
-### `yarn test`
+ReactDOM.render(
+  <App anecdotes={anecdotes} />,
+  document.getElementById('root')
+)
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+GoogleがJavaScriptで乱数を生成する方法を教えてくれます.
+ブラウザのコンソールで乱数の生成をテストすることができることを覚えておいてください.
 
-### `yarn build`
+完成したアプリケーションは次のようになります.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img src="https://fullstackopen.com/static/8577fa00fc4d946e2322de9b2707c89c/14be6/18a.png">
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+警告: `create-react-app`は, 既存のgitリポジトリの中でアプリケーションを作成しない限り,
+プロジェクトを自動的にgitリポジトリに変えてしまします.
+たいていの場合, それぞれのプロジェクトを別々のリポジトリにしたくないので,
+アプリケーションのルートで`rm -rf .git`コマンドを実行して.gitフォルダを削除しましょう.
