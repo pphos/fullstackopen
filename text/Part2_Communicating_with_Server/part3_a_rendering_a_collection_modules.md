@@ -68,3 +68,10 @@ YouTubeビデオシリーズの<a href="https://www.youtube.com/playlist?list=PL
 - <a href="https://www.youtube.com/watch?v=bCqtb-Z5YGQ&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84&index=2">Map</a>
 - <a href="https://www.youtube.com/watch?v=Wl98eZpkp-c&t=31s">Reduce basics</a>
 
+## Event handlers revisited
+昨年のコースに基づいて, イベント処理は難しいということが分かりました.
+トピックに関する固有の知識にブラッシュアップが必要であると思われる場合は,
+前のパートの最後にある"event handlers revisited"をもう一度読み返して見ましょう.
+
+`App`コンポーネントの子コンポーネントにイベントハンドラを渡すことで, いくつかの疑問が生じてくるでしょう.
+このトピックに関する記載は<a href="https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#passing-event-handlers-to-child-components">こちら</a>にあります.
