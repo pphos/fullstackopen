@@ -56,3 +56,15 @@ Visual Studio Code (VS Code)では, "snippets", つまり, Netbeansの"sout"の�
   }
 }
 ```
+
+## JavaScript Arrays
+ここからは, `find`, `filter`, `map`のようなJavaScript配列の関数型プログラミングメソッドを常用します.
+これらは, Java 8のストリームと同じ一般的な原則に基づいて動作します.
+Java 8のストリームは, 個々数年, 大学のコンピュータサイエンス学部の"Ohjelmoinnin perusteet"コースと"Ohjelmoinnin jatkokurssi"コースの両方で使用されており, Massive Open Online Course(MOOC)のプログラミングでも使用されます.
+
+配列を使用した関数型プログラミングに慣れていない場合は,
+YouTubeビデオシリーズの<a href="https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84">"Functional Programming in JavaScript"</a>の最初の3パートは少なくとも見ておく価値があります.
+- <a href="https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84">Higher-order functions </a>
+- <a href="https://www.youtube.com/watch?v=bCqtb-Z5YGQ&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84&index=2">Map</a>
+- <a href="https://www.youtube.com/watch?v=Wl98eZpkp-c&t=31s">Reduce basics</a>
+
