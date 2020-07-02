@@ -33,3 +33,26 @@ props value is [Object object]
 逆に, 上の2つ目の例のように, カンマで区切られた別々の引数としてオブジェクトを`console.log`に渡すと,
 オブジェクトの中身は調査しがいのある文字列として開発者コンソールに出力されます.
 必要であれば, Reactアプリケーションのデバッグの詳細については<a href="https://fullstackopen.com/en/part1/a_more_complex_state_debugging_react_apps#debugging-react-applications">こちら</a>を参照してください.
+
+
+## Protip: Visual Studio Code snippets
+Visual Studio Code (VS Code)では, "snippets", つまり, Netbeansの"sout"の挙動のように,
+よく利用されるコード片をすばやく生成するためのショートカットを簡単に作成することができます.
+スニペットの作成方法は<a href="https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets">こちら</a>を参照してください.
+
+便利な既製のスニペットは, たとえば<a href="https://marketplace.visualstudio.com/items?itemName=xabikos.ReactSnippets">こちら</a>のVS Codeプラグインとしても見つかります.
+
+最も重要なスニペットは, `clog`など, `console.log()`コマンドのスニペットです.
+これは次のように作成できます.
+
+```js
+{
+  "console.log": {
+    "prefix": "clog",
+    "body": [
+      "console.log('$1')",
+    ],
+    "description": "Log output to console"
+  }
+}
+```
