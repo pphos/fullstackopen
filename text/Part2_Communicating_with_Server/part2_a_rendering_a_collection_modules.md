@@ -197,3 +197,38 @@ const App = (props) => {
 }
 ```
 
+## Key-attribute
+アプリケーションが機能しているように見えても, コンソールに厄介な警告が表示されます.
+
+<img src="https://fullstackopen.com/static/fbe2815380db6eb1be707011330d79e1/14be6/1a.png">
+
+エラーメッセージのリンク先のページで示されているように, リスト項目, つまり`map`メソッドによって生成された要素は,
+それぞれが一意のキー値, つまり`key`とよばれる属性を持つ必要があります.
+
+キー値を追加しましょう.
+
+```js
+const App = (props) => {
+  const { notes } = props
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note =>
+          <li key={note.id}>
+            {note.content}
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}
+```
+
+キー値を追加すると, エラーメッセージが消えます.
+
+Reactは, 配列内のオブジェクトの`key`属性を使用して, コンポーネントが再レンダリングされたときに
+コンポーネントによって生成されたビューを更新する方法を決定します.
+これについての詳細は<a href="https://reactjs.org/docs/reconciliation.html#recursing-on-children">こちら</a>をご覧ください.
+
