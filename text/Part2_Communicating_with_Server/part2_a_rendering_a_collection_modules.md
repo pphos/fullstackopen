@@ -232,3 +232,93 @@ Reactは, 配列内のオブジェクトの`key`属性を使用して, コンポ
 コンポーネントによって生成されたビューを更新する方法を決定します.
 これについての詳細は<a href="https://reactjs.org/docs/reconciliation.html#recursing-on-children">こちら</a>をご覧ください.
 
+## Map
+配列のメソッドである`map`がどのような挙動を示すかを理解することは, 残りのコースでは非常に重要です.
+
+アプリケーションには`notes`という配列が含まれています.
+
+```js
+const notes = [
+  {
+    id: 1,
+    content: 'HTML is easy',
+    date: '2019-05-30T17:30:31.098Z',
+    important: true
+  },
+  {
+    id: 2,
+    content: 'Browser can execute only Javascript',
+    date: '2019-05-30T18:39:34.091Z',
+    important: false
+  },
+  {
+    id: 3,
+    content: 'GET and POST are the most important methods of HTTP protocol',
+    date: '2019-05-30T19:20:14.298Z',
+    important: true
+  }
+]
+```
+
+少し立ち止まって, `map`がどのように機能するかを見てみましょう.
+
+次のコードがファイルの末尾に追加されているとしましょう.
+
+```js
+const result = notes.map(note => note.id)
+console.log(result)
+```
+
+`[1, 2, 3]`がコンソールに出力されます.
+`map`は常に新しい配列を生成します.
+その要素は,元の配列の要素からマッピング,
+つまり, `map`メソッドのパラメータに指定された関数を使用して作成されます.
+
+```js
+note => note.id
+```
+
+上記の関数はコンパクトな形で書かれたアロー関数です.
+省略しない形式は次のようになります.
+
+```js
+(note) => {
+  return note.id
+}
+```
+
+関数はパラメータとして`note`オブジェクトを取得し, その`id`フィールドの値を返します.
+
+コマンドを次のように変更します.
+
+```js
+const result = notes.map(note => note.content)
+```
+
+結果は`note`のコンテンツを含む配列になります.
+
+これは, 既に使用したReactコードにかなり近いものです.
+
+```js
+notes.map(note =>
+  <li key={note.id}>{note.content}</li>
+)
+```
+
+各`note`オブジェクトから`note`の`content`を含む`li`タグを生成します.
+
+関数パラメーターが`map`メソッドに渡されるため,
+
+```js
+note => <li key={note.id}>{note.content}</li>
+```
+
+上記のコードがビューを作成するために使用され,
+変数の値は中括弧の内側にレンダリングする必要があります.
+中括弧を削除するとどうなるかを確認してください.
+
+中括弧を使用すると最初は頭痛の種になりますが, すぐに慣れます.
+Reactからの資格的なフィードバックはすぐに得られます.
+
+
+
