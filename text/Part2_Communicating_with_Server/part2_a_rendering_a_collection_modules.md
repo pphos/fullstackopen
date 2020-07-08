@@ -347,4 +347,157 @@ notes.map((note, i) => ...)
 これについて詳しくは, <a href="https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318">こちら</a>をご覧ください.
 
 
+## Refactoring modules
+コードを少し整理してみましょう.
+propsの`notes`フィールドのみに関心があるので, 分割代入を使用してそれを直接取得します.
+
+```js
+const App = ({ notes }) => {
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note =>
+          <li key={note.id}>
+            {note.content}
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}
+```
+
+分割代入の意味と仕組みを忘れた場合は, <a href="https://fullstackopen.com/en/part1/component_state_event_handlers#destructuring">これ</a>を確認してください.
+
+単一の`Note`の表示を独立したコンポーネントに分離します.
+
+```js
+const Note = ({ note }) => {
+  return (
+    <li>{note.content}</li>
+  )
+}
+
+const App = ({ notes }) => {
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
+}
+```
+
+`key`属性は, 以前のように`li`タグではなく, `Note`コンポーネントに対して定義する必要があることに注意してください.
+
+Reactアプリケーション全体を1つのファイルに書き込むことができます.
+もちろん, それはあまり実用的ではありません.
+一般的な方法は, 各コンポーネントを独自のファイルでES6モジュールとして宣言することです.
+
+今までずっとモジュールを使っています.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+```
+
+ファイルの最初の2行では2つのモジュールをインポートし, それらを`index.js`内で使用できるようにしています.
+reactモジュールは`React`という変数に割り当てられ, react-domは`ReactDOM`という変数に割り当てられます.
+
+`Note`コンポーネントを独立したモジュールに移動してみましょう.
+
+小さなアプリケーションでは, コンポーネントは通常, componentsと呼ばれるディレクトリに配置されます.
+このディレクトリは, srcディレクトリ内に配置されます.
+命名規則はコンポーネントにちなんだファイル名をつけることです.
+
+次に, アプリケーション用のcomponentsと呼ばれるディレクトリを作成し, `Note.js`という名前のファイルをその中に配置します.
+`Note.js`ファイルの内容は次の通りです.
+
+```js
+import React from 'react'
+
+const Note = ({ note }) => {
+  return (
+    <li>{note.content}</li>
+  )
+}
+
+export default Note
+```
+
+これはReactコンポーネントなので, 必ずreactモジュールをインポートする必要があります.
+
+モジュールの最後の行は, 宣言されたモジュールである`Note`変数をエクスポートします.
+
+これで, コンポーネントを使用しているファイル (`index.js`)がモジュールをインポートできるようになりました.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Note from './components/Note'
+
+const App = ({ notes }) => {
+  // ...
+}
+```
+
+モジュールによってエクスポートされたコンポーネントは, 以前と同じように,
+変数`Note`で使用できるようになりました.
+
+独自コンポーネントをインポートするときは, インポートするファイルに関連してそれらの場所を
+指定する必要があることに注意してください.
+
+```js
+'./components/Note'
+```
+
+冒頭のピリオド -`.`- はカレントディレクトリを指しているので,
+モジュールの場所はカレントディレクトリのcomponentsサブディレクトリにある`Note.js`というファイルになります.
+ファイルの拡張子 -`.js`- は省略することができます.
+
+`App`はコンポーネントでもあるので, 独自のモジュールでも宣言しましょう.
+これはアプリケーションのルートコンポーネントであるため, srcディレクトリに配置します.
+ファイルの内容は次の通りです.
+
+```js
+import React from 'react'
+import Note from './components/Note'
+
+const App = ({ notes }) => {
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map((note) =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
+}
+
+export default App
+```
+
+モジュールには, コンポーネント宣言を独自のファイルに分離できるようにする以外にも, 様々な用途があります.
+このコースの後半でそれらについて見ていきます.
+
+アプリケーションの現在のコードは<a href="https://github.com/fullstack-hy2020/part2-notes/tree/part2-1">GitHub</a>にあります.
+
+リポジトリのマスターブランチには, アプリケーションの新しいバージョンのコードが含まれていることに注意してください.
+現在のコードは<a href="https://github.com/fullstack-hy2020/part2-notes/tree/part2-1">part2-1</a>ブランチにあります.
+
+<img src="https://fullstackopen.com/static/f356d587d39215504b8bd17318b6b603/14be6/2e.png">
+
+プロジェクトを複製する場合は, `npm start`でアプリケーションを開始する前に,
+`npm install`コマンドを実行してください.
+
+## When the application breaks
+
+
 
