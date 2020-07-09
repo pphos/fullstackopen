@@ -498,6 +498,105 @@ export default App
 `npm install`コマンドを実行してください.
 
 ## When the application breaks
+プログラミングキャリアの初期の頃 (そしてあなたのように30年間コーディングしてきた後でも),
+アプリケーションが完全に壊れてしまうことがよくあります.
+これは, JavaScriptのような動的型付けされた言語の場合はなおさらのことで,
+コンパイラが例えば関数変数や戻り値のデータ型をチェックしません.
+
+"Reactの爆発"は, 例えば次のようになります.
+
+<img src="https://fullstackopen.com/static/c44f00492b83cda870b1bda682ff583f/14be6/3b.png">
+
+こららの状況では, 最善の方法は`console.log`を用いることです.
+爆発の原因となったコードは次の通りです.
+
+```js
+const Course = ({ course }) => (
+  <div>
+   <Header course={course} />
+  </div>
+)
+
+const App = () => {
+  const course = {
+    // ...
+  }
+
+  return (
+    <div>
+      <Course course={course} />
+    </div>
+  )
+}
+```
+
+コードに`console.log`コマンドを追加して, 故障の原因に迫ります.
+最初にレンダリングされるのは`App`コンポーネントなので, 最初の`console.log`をそこに置くことには価値があります.
+
+```js
+const App = () => {
+  const course = {
+    // ...
+  }
+
+  console.log('App works...')
+
+  return (
+    // ..
+  )
+}
+```
+
+コンソール上の表示を見るためには, エラーの長い赤い壁を上にスクロールしなければなりません.
+
+<img src="https://fullstackopen.com/static/0f858d815c1abe509e04008e7d00d8d8/14be6/4b.png">
+
+一つの機能がうまくいっているとわかったら, もっと深くログを取るときです.
+コンポーネントが単一の文として宣言されていたり, `return`のない関数として宣言されていたりすると,
+コンソールへの出力が難しくなります.
+
+```js
+const Course = ({ course }) => (
+  <div>
+   <Header course={course} />
+  </div>
+)
+```
+
+表示を追加するためには, コンポーネントを長い形式に変更する必要があります.
+
+```js
+const Course = ({ course }) => {
+  console.log(course)
+  return (
+    <div>
+    <Header course={course} />
+    </div>
+  )
+}
+```
+
+多くの場合, 問題の原因は, propsが異なる型であると期待されていたり,
+実際とは異なる名前で呼ばれていたりして, 結果として分割代入が失敗していることにあります.
+この問題の多くは, 分割代入が取り除かれたときに解決し始めることが多く, propsが実際には何を含んでいるかを見てみましょう.
+
+```js
+const Course = (props) => {
+  console.log(props)
+  const { course } = props
+  return (
+    <div>
+    <Header course={course} />
+    </div>
+  )
+}
+```
+
+それでも問題が解決されない場合は, コードの周りに`console.log`文を追加してバグを探し続ける以外にできることはほとんどありません.
+
+次の問題の模範解答が完全に動作しなくなった後(propsの型が間違っていたため),
+`console.log`を使ってデバッグしなければなかったので, この章を教材に追加しました.
+
 
 
 
