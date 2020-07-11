@@ -613,3 +613,168 @@ const Course = (props) => {
 警告: `create-react-app`は, 既存のgitリポジトリの中でアプリケーションを作成しない限り, プロジェクトを自動的にgitリポジトリに変えてしまします. たいていの場合, それぞれのプロジェクトを別々のリポジトリにしたくないので, アプリケーションのルートで`rm -rf .git`コマンドを実行して.gitフォルダを削除しましょう.
 
 
+## 2.1: Course infomation step6
+演習1.1 ~ 1.5の講座内容をレンダリングするコードを完成させましょう.
+演習は模範解答のコードから始めることができます.
+パート1の模範解答は, <a href="https://studies.cs.helsinki.fi/stats/courses/fullstackopen">提出システム</a>にアクセスして,
+上部にあるmy submisionsをクリックし, solution列の下にあるパート1に対応する行でshowをクリックすることで見つけることができます.
+course info 演習の模範解答を見るには, kurssitiedot ("kurssitiedot"は"course info"を意味します) の下にある`index.js`をクリックしてください.
+
+プロジェクトをある場所から別の場所にコピーした場合, `node_modules`ディレクトリを削除し,
+`npm install`コマンドで依存関係を解決し直さなければならないことに注意してください.
+一般的に, プロジェクトの全体の内容をコピーしたり, `node_modules`ディレクトリをバージョン管理システムに追加したりすることは推奨されません.
+
+`App`コンポーネントを次のように変更してみましょう.
+
+```js
+const App = () => {
+  const course = {
+    id: 1,
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10,
+        id: 1
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7,
+        id: 2
+      },
+      {
+        name: 'State of a component',
+        exercises: 14,
+        id: 3
+      }
+    ]
+  }
+
+  return <Course course={course} />
+}
+```
+
+`Course`と呼ばれる単一のコースの書式設定を担当するコンポーネントを定義します.
+
+アプリケーションのコンポーネント構造は例えば次のようになります.
+
+```js
+App
+  Course
+    Header
+    Content
+      Part
+      Part
+      ...
+```
+
+したがって, `Course`コンポーネントには, 前回のパートで定義されたコンポーネントが含まれ,
+コース名とそのパートのレンダリングを担当します.
+
+レンダリングされたページは, 例えば次のようになります.
+
+<img src="https://fullstackopen.com/static/6e12df59c1c9e28c39ebdbe1b41ccf97/14be6/8e.png">
+
+演習数の合計はまだ必要ありません.
+
+アプリケーションはコースのパート数に関係なく動作する必要があるため, コースのパートを追加または削除した場合でもアプリケーションが機能することを確認してください.
+
+コンソールにエラーが表示されないことも確認してください.
+
+
+## 2.2: Course information step7
+コースの演習数の合計も表示してください.
+
+<img src="https://fullstackopen.com/static/2d8aa950189db6cf2eeb794181429ae9/14be6/9e.png">
+
+
+## 2.3: Course information step8
+まだ実行していない場合は, 配列メソッド`reduce`を使用して演習の合計を計算してください.
+
+Pro tip: コードが次のようになっている場合,
+
+```js
+const total =
+  parts.reduce((s, p) => someMagicHere)
+```
+
+プログラムが正常に動作しない場合は, `console.log`を使ってみる価値があります.
+`console.log`を使用してデバッグを行う場合には, アロー関数を省略しない形式で記述する必要があります.
+
+```js
+const total = parts.reduce((s, p) => {
+  console.log('what is happening', s, p)
+  return someMagicHere
+})
+```
+
+Pro tip2: アロー関数の省略しない形式に, またはその逆に自動的に変換する<a href="https://marketplace.visualstudio.com/items?itemName=cmstead.jsrefactor">VS Code用のプラグイン</a>があります.
+
+<img src="https://fullstackopen.com/static/3d941b76fc2e66aa39e0198aa1ef0a56/14be6/5b.png">
+
+## 2.4: Course information step9
+アプリケーションを拡張して, 任意のコース数に対応可能なようにしましょう.
+
+```js
+const App = () => {
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
+
+  return (
+    <div>
+      // ...
+    </div>
+  )
+}
+```
+
+たとえば, アプリケーションは次のようになります.
+
+<img src=">https://fullstackopen.com/static/8c1ce3363ec056cd15c5edacbeec3370/14be6/10e.png">
+
+## 2.5: separate module
+`Course`コンポーネントを別のモジュールとして宣言しましょう.
+そして, `App`コンポーネントによってインポートされるようにしましょう.
+コースのすべてのサブコンポーネントを同じモジュールに含めても問題ありません.
