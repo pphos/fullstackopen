@@ -261,3 +261,136 @@ setNewNote('')
 現在のアプリケーションのコード全体は, <a href="https://github.com/fullstack-hy2020/part2-notes/tree/part2-2">このgithubリポジトリ</a>のpart2-2ブランチにあります.
 
 ## Filtering Displayed Elements
+重要なノートのみを表示できる新しい機能をアプリケーションに追加しましょう.
+
+どのノートを表示すべきかを追跡するためのstateを`App`コンポーネントに追加してみましょう.
+
+```js
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+
+  // ...
+}
+```
+
+`notesToShow`変数に表示されるすべてのノートのリストを格納するようにコンポーネントを変更してみましょう.
+リストの項目は, コンポーネントの状態によって異なります.
+
+```js
+import Note from './components/Note'
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+
+  // ...
+
+  const notesToShow = showAll
+    ? notes
+    : notes.filter(note => note.important === true)
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      // ...
+    </div>
+  )
+}
+```
+
+`notesToShow`変数の定義はかなりコンパクトです.
+
+```js
+const notesToShow = showAll
+  ? notes
+  : notes.filter(note => note.important === true)
+```
+
+この定義では, 他の多くのプログラミング言語にもある条件演算子を使用しています.
+
+オペレータは次のように機能します.
+
+```js
+const result = condition ? val1 : val2
+```
+
+上記の文の場合, 条件が`true`であれば, `result`変数の値は`val1`に設定されます.
+条件が`false`の場合, `result`変数の値は`val2`に設定されます.
+
+`showAll`の値が`false`の場合, `notesToShow`変数は, `important`プロパティが`true`に設定されているノートのみに割り当てられます.
+このとき, フィルタリングは配列の`filter`メソッドを使用して行われます.
+
+```js
+notes.filter(note => note.important === true)
+```
+
+`note.important`の値が`true`または`false`であるため, 比較演算子の使用は実際には冗長です.
+つまり, 次のように簡単に記述できます.
+
+```js
+notes.filter(note => note.important)
+```
+
+最初に比較演算子を用いた方法を示した理由は, JavaScriptでは, `val1 == val2`はすべての状況で期待通りに機能せず,
+比較の際には, `val1 === val2`を使用する方が安全であるという重要な事柄を強調するためでした.
+このトピックについての詳細事項は, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">こちら</a>をご覧ください.
+
+状態`showAll`の初期値を変更して, フィルタリング機能をテストできます.
+
+次に, ユーザがユーザインターフェースからアプリケーションの状態`showAll`を切り替えることができる機能を追加してみましょう.
+
+関連する変更を以下に示します.
+
+```js
+import React, { useState } from 'react'
+import Note from './components/Note'
+
+const App = (props) => {
+  const [notes, setNotes] = useState(props.notes)
+  const [newNote, setNewNote] = useState('')
+  const [showAll, setShowAll] = useState(true)
+
+  // ...
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <div>
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all' }
+        </button>
+      </div>
+      <ul>
+        {notesToShow.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      // ...
+    </div>
+  )
+}
+```
+
+表示されるノート (全てまたは重要なノート) はボタンで制御されます.
+ボタンのイベントハンドラーは非常に単純なので, ボタン要素の属性で直接定義されます.
+イベントハンドラーは`showAll`の値を`true`から`false`に, またはその逆に切り替えます.
+
+```js
+() => setShowAll(!showAll)
+```
+
+ボタンのテキストは, 状態`showAll`の値によって異なります.
+
+```js
+show {showAll ? 'important' : 'all'}
+```
+
+現在のアプリケーションのコード全体は, <a href="https://github.com/fullstack-hy2020/part2-notes/tree/part2-3">このgithubリポジトリ</a>のpart2-3ブランチにあります.
