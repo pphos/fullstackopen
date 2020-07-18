@@ -394,3 +394,183 @@ show {showAll ? 'important' : 'all'}
 ```
 
 現在のアプリケーションのコード全体は, <a href="https://github.com/fullstack-hy2020/part2-notes/tree/part2-3">このgithubリポジトリ</a>のpart2-3ブランチにあります.
+
+
+## Exercises 2.6. -2.10.
+最初の演習では, 後の演習でさらに開発されるアプリケーションの開発を開始します.
+関連する一連の演習では, アプリケーションの最終バージョンを提出するだけで十分です.
+また, 演習の各パートを終えた後に, 別々にコミットすることもできますが, それはどちらでも構いません.
+
+警告: `create-react-app`は, 既存のgitリポジトリの中でアプリケーションを作成しない限り, プロジェクトを自動的にgitリポジトリに変えてしまします. たいていの場合, それぞれのプロジェクトを別々のリポジトリにしたくないので, アプリケーションのルートで`rm -rf .git`コマンドを実行して.gitフォルダを削除しましょう.
+
+## 2.6: The Phonebook Step1
+簡単な電話帳を作ってみましょう.
+このパートでは, 電話帳に名前を追加するだけで十分です.
+
+電話帳へ人を追加する実装から始めましょう.
+
+以下のコードを, アプリケーションの`App`コンポーネントの開始のコードとして使用できます.
+
+```js
+import React, { useState } from 'react'
+
+const App = () => {
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas' }
+  ])
+  const [ newName, setNewName ] = useState('')
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form>
+        <div>
+          name: <input />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      ...
+    </div>
+  )
+}
+
+export default App
+```
+
+状態`newName`は, フォームのinput要素を制御するためのものです.
+
+デバッグの目的で, stateやその他の変数をテキストとしてレンダリングすると便利な場合があります.
+レンダリングされたコンポーネントに次の要素を一時的に追加できます.
+
+```js
+<div>debug: {newName}</div>
+```
+
+また, パート1のdebugging React applicationsの章で学んだことをうまく活用することも重要です.
+特に, React developer tools拡張機能は, アプリケーションのstateで発生する変更を追跡するのに非常に役立ちます.
+
+この演習を完了すると, アプリケーションは次のようになります.
+
+<img src="https://fullstackopen.com/static/501199c4a6d7a5702a7bdf31998d5a1d/5a190/10e.png">
+
+上の画像のReact developer tools拡張機能の使用に注意してください.
+
+注意:
+- 人物の名前を`key`プロパティの値として使用できます.
+- HTMLフォームを送信するデフォルトの挙動を防止することを忘れないでください！
+
+
+## 2.7: The Phonebook Step2
+電話帳に既に存在する名前をユーザが追加できないようにしましょう.
+JavaScriptの配列には, このタスクを達成するのに適した多数のメソッドがあります.
+
+このような操作が試行された場合, `alert`コマンドで警告を表示しましょう.
+
+<img src="https://fullstackopen.com/static/d5be58590c1460090cb1c87adf201886/5a190/11e.png">
+
+ヒント: 変数の値を含む文字列を作成する場合な, テンプレート文字列を使用することをお勧めします.
+
+```js
+`${newName} is already added to phonebook`
+```
+
+変数`newName`が`Arto Hellas`の値を保持している場合, テンプレート文字列式は文字列を返します.
+
+```js
+`Arto Hellas is already added to phonebook`
+```
+
+`+`演算子を使用することで, よりJavaに似た方法で同じことができます.
+
+```js
+newName + ' is already added to phonebook'
+```
+
+テンプレート文字列の使用は, より慣例的なオプションであり, 真のJavaScript専門家の証です.
+
+
+## 2.8: The Phonebook Step3
+ユーザーが電話番号を電話帳に追加できるようにして, アプリケーションを拡張しましょう.
+2つめのinput要素を(独自のイベントハンドラと共に)フォームに追加する必要があります.
+
+```js
+<form>
+  <div>name: <input /></div>
+  <div>number: <input /></div>
+  <div><button type="submit">add</button></div>
+</form>
+```
+
+この時点で, アプリケーションは次のようになります.
+この画像には, React developer toolsを使用してアプリケーションのstateも表示されます.
+
+<img src="https://fullstackopen.com/static/3068a34af61692773a06d60ee93638a9/5a190/12e.png">
+
+## 2.9*: The Phonebook Step4
+人物のリストを名前でフィルタリングするために使用できる検索フィールドを実装しましょう.
+
+<img src="https://fullstackopen.com/static/4b5897029d4c9e2eb61631ca4c1a4f24/5a190/13e.png">
+
+HTMLフォームの外部に配置されるinput要素として検索フィールドを実装できます.
+画像に表示されているフィルタリングロジックは大文字と小文字を区別しません.
+つまり, artoを検索すると大文字のAを持つArtoを含む結果も返します.
+
+注意: 新しい機能の実装に取り組んでいるとき, いくつかのダミーデータをアプリケーションに"ハードコード"すると便利なことがよくあります.
+
+```js
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
+
+  // ...
+}
+```
+
+これにより, 新しい機能をテストするためにデータを手動でアプリケーションに入力する必要がなくなります.
+
+## 2.10: The Phonebook Step5
+アプリケーションを単一のコンポーネントに実装している場合は, 適切な部品を新しいコンポーネントに抽出することにより,
+アプリケーションをリファクタリングしましょう.
+`App`のルートコンポーネントで, アプリケーションのstateとすべてのイベントハンドラを維持するようにします.
+
+アプリケーションから3つコンポーネントを抽出するだけで十分です.
+個別のコンポーネントに分ける有力な候補は, たとえば, 検索フィルター, 電話帳に新しい人を追加するためのフォーム,
+電話帳から全ての人をレンダリングするコンポーネント, および一人の人の詳細をレンダリングするコンポーネントです.
+
+アプリケーションのルートコンポーネントは, リファクタリング後は次のようになります.
+以下のリファクタリングされたルートコンポーネントはタイトルのみをレンダリングし,
+抽出されたコンポーネントが残りを処理できるようにします.
+
+```js
+const App = () => {
+  // ...
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+
+      <Filter ... />
+
+      <h3>Add a new</h3>
+
+      <PersonForm
+        ...
+      />
+
+      <h3>Numbers</h3>
+
+      <Persons ... />
+    </div>
+  )
+}
+```
+
+注意: コンポーネントを「間違った場所」に定義すると, この演習で問題が発生する可能性があります.
+今は, この章の最後のパートから他のコンポーネントにコンポーネントを定義しないようにするためのリハーサルをするのに良いときでしょう.
