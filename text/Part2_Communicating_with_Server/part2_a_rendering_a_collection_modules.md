@@ -772,7 +772,7 @@ const App = () => {
 
 たとえば, アプリケーションは次のようになります.
 
-<img src=">https://fullstackopen.com/static/8c1ce3363ec056cd15c5edacbeec3370/14be6/10e.png">
+<img src="https://fullstackopen.com/static/8c1ce3363ec056cd15c5edacbeec3370/14be6/10e.png">
 
 ## 2.5: separate module
 `Course`コンポーネントを別のモジュールとして宣言しましょう.
