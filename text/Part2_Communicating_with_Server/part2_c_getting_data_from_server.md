@@ -299,3 +299,117 @@ npm install json-server --save-dev
 コースの次のパートでは, さまざまな依存関係について詳しく説明します.
 
 ## Axios and promises
+これでaxiosを使用する準備ができました.
+今後, json-serverは3001番ポートで実行されていると想定しています.
+
+注意: json-serverとreactアプリを同時に実行するには, 2つのターミナルウィンドウを使用する必要がある場合があります.
+1つのターミナルでjson-serverを実行し続け, もう一つのターミナルでreact-appを実行してください.
+
+ライブラリは, Reactなどの他のライブラリと同様に使用できます.
+つまり, 適切な`import`文を使用することでライブラリを利用できます.
+
+次のコードを`index.js`に追加しましょう.
+
+```js
+import axios from 'axios'
+
+const promise = axios.get('http://localhost:3001/notes')
+console.log(promise)
+
+const promise2 = axios.get('http://localhost:3001/foobar')
+console.log(promise2)
+```
+
+以下の警告文はコンソールに表示されます.
+
+<img src="https://fullstackopen.com/static/823a2e7f414c99cb849a42470e4f372d/5a190/16b.png">
+
+Axiosの`get`メソッドはpromiseを返します.
+
+Mozillaのサイトのドキュメントでは, promiseについて次のように述べています.
+
+  Promiseは, 非同期処理の最終的な完了または失敗を表すオブジェクトです.
+
+つまり, Promiseは非同期処理を表すオブジェクトであり, promiseには異なる3つの状態があります.
+
+1. pendding: 最終的な値 (次の2つのうち1つ) がまだ利用できていないことを意味します.
+2. fulfilled: 処理が完了・成功して, 最終的な値が利用可能になったことを意味します. この状態を`resolvedと呼ぶこともあります.
+3. rejected: エラーが原因で処理に失敗し, 最終的な値が決定できなかったことを意味します.
+
+例に上げたコードの最初のpromiseはfulfilledであり, `axios.get('http://localhost:3001/notes')`のリクエストの成功を表しています.
+ただし, 2つ目のリクエストはrejectedされ, その原因がコンソールに表示されます.
+どうやら, 存在しないアドレスにHTTP GETリクエストを送信しようとしていたようです.
+
+promiseで表される処理の結果にアクセスしたい場合は, イベントハンドラをpromiseに登録する必要があります.
+これは次のメソッドを使用して実現されます.
+
+```js
+const promise = axios.get('http://localhost:3001/notes')
+
+promise.then(response => {
+  console.log(response)
+})
+```
+
+以下がコンソールに表示されます.
+
+<img src="https://fullstackopen.com/static/ea48db35e4b6b6ee75bd0b7795ea958c/5a190/17e.png">
+
+JavaScriptの実行環境は, `then`メソッドで登録されたコールバック関数を呼び出し, `response`オブジェクトをパラメータとして提供します.
+`response`オブジェクトには, HTTP GETリクエストに関連するすべての重要なデータが含まれており,
+返されたデータ, ステータスコード, ヘッダなどが含まれます.
+
+通常,  promiseオブジェクトを変数に格納する必要はありません.
+代わりに, `then`メソッド呼び出しを`axios`メソッド呼び出しにチェーンして, 直接それに従うようにすることが一般的です.
+
+```js
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  console.log(notes)
+})
+```
+
+コールバック関数は, レスポンスに含まれるデータを取得して変数に格納し, ノートをコンソールに出力します.
+
+チェーンメソッド呼び出しをフォーマットするより読みやすい方法は, それぞれのメソッド呼び出しを別々の行に配置することです.
+
+```js
+axios
+  .get('http://localhost:3001/notes')
+  .then(response => {
+    const notes = response.data
+    console.log(notes)
+  })
+```
+
+サーバから返されるデータはプレーンテキストであり, 基本的には長い文字列です.
+サーバが`context-type`ヘッダを利用してデータ形式を`application/json;charset=utf8`(前の画像を参照)と指定しているので,
+`axios`ライブラリはデータをJavaScriptの配列にパースすることができます.
+
+やっとサーバから取得したデータを使い始めることができます.
+
+ローカルサーバにノートをリクエストして, 最初はAppコンポーネントそしてレンダリングしてみましょう.
+レスポンスを正常に取り出せた場合にのみAppコンポーネント全体をレンダリングするため,
+このアプローチには多くの問題があることに注意してください.
+
+```js
+import ReactDOM from 'react-dom'
+import React from 'react'
+import App from './App'
+
+import axios from 'axios'
+
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  ReactDOM.render(
+    <App notes={notes} />,
+    document.getElementById('root')
+  )
+})
+```
+
+この方法は状況によっては許容できる場合もありますが, やや問題があります.
+代わりに, データのフェッチをAppコンポーネントに移動しましょう.
+
+## Effect-hooks
+
