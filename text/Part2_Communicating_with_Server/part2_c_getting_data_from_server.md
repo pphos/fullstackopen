@@ -159,3 +159,143 @@ setTimeout(() => {
 
 
 ## npm
+サーバからデータを取得するトピックに戻りましょう.
+
+前述のPromiseベースの`fetch`関数を使用して, サーバからデータを取得することができます.
+Fetch APIは優れたツールであり, IEを除く全てのモダンなブラウザでサポートされています.
+
+つまり, ブラウザとサーバ間の通信には代わりに`axios`ライブラリを使うことになります.
+`axios`ライブラリは`fetch`と似たような機能を持ちますが, より快適に使うことができます.
+`axios`を使用するもう一つの理由は, Reactプロジェクトに外部ライブラリ (いわゆるnpmパッケージ) を追加することに慣れていることです.
+
+現在, ほとんどすべてのJavaScriptプロジェクトは, node package manager (別名npm)を使用して定義されています.
+`create-react-app`を使って作成されたプロジェクトもnpmの形式に従っています.
+プロジェクトがnpmの形式に基づいていることを示す明確な指標は, プロジェクトのルートに存在する`package.json`ファイルです.
+
+```js
+{
+  "name": "notes",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+この時点で, プロジェクトがどのような依存関係, つまり外部ライブラリを持っているかを定義しているので,
+`dependencies`の部分に最も関心があります.
+
+次に, `axios`を使用します.
+理論的には, `package.json`ファイルでライブラリを直接定義できますが,
+コマンドラインからインストールすることをお勧めします.
+
+```js
+npm install axios --save
+```
+
+注意: `npm`コマンドは常に, `package.json`ファイルが見つかるプロジェクトのルートディレクトリで実行する必要があります.
+
+Axiosが他の依存関係に含まれるようになりました.
+
+```js
+{
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  // ...
+}
+```
+
+依存関係に`axios`を追加するだけでなく, `npm install`コマンドではライブラリコードもダウンロードしました.
+他の依存関係と同様に, コードはプロジェクトルートにある`node_modules`ディレクトリに存在します.
+お気づきかも知れませんが, `node_modules`にはかなりの量の興味深いものが含まれています.
+
+さらに追加していきましょう.
+次のコマンドを実行して, 開発時の依存関係として`json-server`をインストールします. これは開発環境時のみに使用されます.
+
+```js
+npm install json-server --save-dev
+```
+
+そして, `package.json`の`scripts`項目に以下の変更を加えます.
+
+```js
+{
+  // ...
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "json-server -p3001 --watch db.json"
+  },
+}
+```
+
+これで, パラメータ定義なしで, 以下のコマンドを使用してプロジェクトのルートディレクトリからjson-serverを簡単に起動できます.
+
+```js
+npm run server
+```
+
+コースのパート3では, より`npm`ツールに親しんでいきます.
+
+注意: 以前に開始したjson-serverは, 新しいjson-serverを開始する前に終了する必要があります.
+そうしなければ, 問題が発生します.
+
+<img src="https://fullstackopen.com/static/7f3c94f76fa1a5a1e55bf4dcd691d3e8/5a190/15b.png">
+
+エラーメッセージの赤字は, 問題について通知しています.
+
+<i>3001番ポートにバインドできません. --port引数またはjson-server.jsonファイルを使用して別のポート番号を指定してください</i>
+
+ご覧のように, アプリケーションはそれ自体を3001番ポートにバインドできません.
+その理由は, 3001番ポートが以前に開始されたjson-serverによって既に占有されているためです.
+
+`npm install`コマンドを2回使用しましたが, これらには若干の違いがあります.
+
+```js
+npm install axios --save
+npm install json-server --save-dev
+```
+
+パラメータには細かな違いがあります.
+プログラムの実行にはライブラリの存在が必要であるため, `axios`はアプリケーションのランタイム依存関係 (--save) としてインストールされます.
+一方, `json-server`はプロジェクトのプログラム自体が必要としないため, 開発依存関係 (--save-dev) としてインストールされました.
+開発依存関係はソフトウェア開発中のサポートに使用されます.
+コースの次のパートでは, さまざまな依存関係について詳しく説明します.
+
+## Axios and promises
